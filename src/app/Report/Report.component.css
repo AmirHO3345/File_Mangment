@@ -1,0 +1,99 @@
+.Report {
+  position: relative ;
+  width : 90% ;
+  margin: 0 auto ;
+}
+
+.Report__About {
+  display: flex ;
+  width : 100% ;
+  padding: 0 1rem ;
+  gap : 1.5rem ;
+  margin-bottom: 6rem ;
+  background-color: #fafafa ;
+  border-radius : var(--radiusBorder);
+  box-shadow: 0.5rem 0.5rem 1.5rem 0.2rem rgba(0,0,0,.15) ;
+}
+
+.Report__Icon {
+  flex-basis: 20% ;
+  font-size: 20rem ;
+  text-align: center ;
+  color : #8d8d8d ;
+  border-right: 2px solid #0000001c ;
+}
+
+.Report__Details {
+  align-self: flex-start;
+  margin-top: 1rem;
+  font-size: 1.8rem;
+}
+
+.Report__Details-info:not(:last-child) {
+  margin-bottom: 1rem;
+}
+
+.Report__Details-info .Key {
+  color: #8e8e8e ;
+  margin-right: 1rem;
+}
+
+.Report__Details-info .Value {
+  color: #4f4f4f;
+  font-weight: 600;
+}
+
+.Report__Log {
+
+}
+
+.Report__Table {
+  width: 100% ;
+  background-color: #fafafa;
+  border-radius: var(--radiusBorder) ;
+  box-shadow: 0.5rem 0.5rem 1.5rem 0.2rem rgba(0,0,0,.15) ;
+}
+
+.Report__Table thead tr ,
+.Report__Table thead th {
+  padding-bottom: 2rem;
+  padding-top: 1.5rem;
+  color: #8e8e8e;
+  border-bottom: 2px solid #0000001c;
+  font-size: 1.4rem;
+  text-transform: uppercase;
+  letter-spacing: .2rem;
+}
+
+.Report__Table tbody th {
+  padding-bottom: 2rem ;
+  padding-top: 2rem ;
+  font-weight: 300;
+  transition: .3s all ease;
+}
+
+.Report__Table tbody tr {
+  cursor: pointer ;
+  transition: all .3s ;
+}
+
+.Report__Table tbody tr:hover {
+  background-color: var(--primaryColor);
+}
+
+.Report__Table tbody tr:hover td {
+  color : #fff ;
+}
+
+.Report__Table-Date {
+  display: block ;
+  margin-bottom: 1rem ;
+}
+
+.Report__Table tbody td {
+  padding: 2rem 0;
+  color: #4f4f4f ;
+  font-weight: 600;
+  text-align: center;
+  font-size: 1.6rem;
+}

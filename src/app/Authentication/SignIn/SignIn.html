@@ -1,0 +1,52 @@
+<section class="Permission_Section">
+  <div class="Container">
+    <div class="Permission__Box">
+      <form class="Permission__Form u-margin-bottom-Medium"
+            (ngSubmit)="OnSubmit(SignInForm)" #SignInForm='ngForm'>
+        <div class="u-margin-bottom-Medium u-text-align-Center">
+          <h2 class="Secondary_Header">Start By Sign-In</h2>
+        </div>
+        <div class="Form__Group">
+          <input id="Email" type="email" class="Form__Input"
+                 ngModel [name]="this.GetSingleton().FormName.Email" placeholder="Email">
+          <label for="Email" class="Form__Label">Email</label>
+          <p class="Form__Error"
+             *ngIf="this.ErrorView.ErrorOccur.Error_Render &&
+             this.ErrorView.ErrorOccur.Error_Position == this.ErrorView.ErrorType().Email"
+          >
+            {{this.ErrorView.ErrorOccur.Error_Message}}
+          </p>
+        </div>
+        <div class="Form__Group">
+          <input id="Password" type="password" class="Form__Input"
+                 ngModel [name]="this.GetSingleton().FormName.Password" placeholder="Password" required>
+          <label for="Password" class="Form__Label">Password</label>
+          <p class="Form__Error"
+             *ngIf="this.ErrorView.ErrorOccur.Error_Render &&
+             this.ErrorView.ErrorOccur.Error_Position == this.ErrorView.ErrorType().Password"
+          >
+            {{this.ErrorView.ErrorOccur.Error_Message}}
+          </p>
+        </div>
+        <div class="Form__Group">
+          <div class="Form__Group-Checkbox">
+            <div class="Form__Checkbox">
+              <input id="KeepLog" type="checkbox" class="Form__Checkbox-Input"
+                     ngModel [name]="this.GetSingleton().FormName.SaveLogin">
+              <label for="KeepLog" class="Form__Checkbox-Label">
+                <span class="Form__Checkbox-Button">&nbsp;</span>
+                Keep Login
+              </label>
+            </div>
+          </div>
+        </div>
+        <div class="Form__Group u-text-align-Center">
+          <button class="Button Button--Large Button--Cyan Form__Submit">Sign In</button>
+        </div>
+      </form>
+      <div class="Permission__Navigate u-text-align-Center">
+        <p>If Not Have Any Account So <span><a [routerLink]="['/SignUp']">Register</a></span></p>
+      </div>
+    </div>
+  </div>
+</section>

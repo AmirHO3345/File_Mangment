@@ -1,0 +1,54 @@
+<aside class="NavMenu u-top-low-render">
+  <header class="NavMenu__Header">
+    <div class="NavMenu__Logo">
+      <i class='bx bxl-soundcloud'></i>
+      <p class="NavMenu__NameSite">Manager File</p>
+    </div>
+  </header>
+  <nav class="NavMenu__Buttons">
+    <ul>
+      <li class="NavMenu__Button-Link">
+        <a href="#">
+          <i class='bx bx-planet' ></i>
+          <span class="NavMenu__ButtonName">Public Group</span>
+        </a>
+      </li>
+      <li class="NavMenu__Button-Link">
+        <a href="#">
+          <i class='bx bx-shape-triangle'></i>
+          <span class="NavMenu__ButtonName">Private Groups</span>
+        </a>
+      </li>
+      <li class="NavMenu__Button-Link">
+        <a href="#">
+          <i class='bx bx-user-circle' ></i>
+          <span class="NavMenu__ButtonName">Profile</span>
+        </a>
+      </li>
+      <li class="NavMenu__Button-Action"
+          (click)="OpenPopup()">
+        <a [routerLink]="['./']">
+          <i class='bx bxs-plus-circle'></i>
+          <span class="NavMenu__ButtonName">New</span>
+        </a>
+      </li>
+    </ul>
+  </nav>
+  <div class="NavMenu__User">
+    <div class="NavMenu__User-Details" *ngIf="this.UserAccount">
+      <img class="NavMenu__User-Image" src="assets/Images/Person.jpg" alt="#">
+      <div class="NavMenu__User-Text">
+        <p class="NavMenu__User-Name">
+          {{this.UserAccount.Name}}
+        </p>
+        <p class="NavMenu__User-Role">
+          {{this.UserAccount.getTypePerson()}}
+        </p>
+      </div>
+      <i class='bx bx-log-out NavMenu__User-Logout'
+          (click)="this.onLogout()"></i>
+    </div>
+  </div>
+</aside>
+<NewObject *ngIf="this.NewObjectOpen"
+            (Close)="ClosePopup()"></NewObject>

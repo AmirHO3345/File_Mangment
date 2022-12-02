@@ -1,0 +1,62 @@
+<section class="PopUp Show u-top-render NewObject__Popup" id="PopUp">
+  <i class='bx bxs-x-circle PopUp__Close'
+      (click)="ClosePopup()"></i>
+  <div class="PopUp__Content PopUp__Content--Small">
+    <form class="NewObject__Form" #NewObject='ngForm'>
+      <div class="PopUp__Header u-margin-bottom-Medium u-text-align-Center">
+        <h2 class="Secondary_Header">New Object</h2>
+      </div>
+      <div class="Form__Group">
+        <Selector-Form
+          [Name]="this.GetSingleton().FormName.NewObject" [FormName]="NewObject"
+          DefaultValue="What value you want ? "
+          [Values]="['New File' , 'New Group']"
+        ></Selector-Form>
+      </div>
+      <!-- New File -->
+      <div *ngIf="NewObject.form.get(this.GetSingleton().FormName.NewObject) &&
+                  NewObject.form.get(this.GetSingleton().FormName.NewObject)?.value == 'New File'">
+        <div class="Form__Group">
+          <input type="file" id="UploadFile" class="Form__File-Input"
+                 ngModel [name]="this.GetSingleton().FormName.FileUpload">
+          <label for="UploadFile" class="Form__File-Label" >
+                        <span class="Form__File-Button">
+                            <i class='bx bx-upload'></i> Upload File
+                        </span>
+            <span class="Form__File-Path">
+                            C://Amir/Image.png
+                        </span>
+          </label>
+        </div>
+        <div class="Form__Group">
+          <input id="FileName" type="text" class="Form__Input"
+                 ngModel [name]="this.GetSingleton().FormName.FileName" placeholder="FileName">
+          <label for="FileName" class="Form__Label">File Name</label>
+        </div>
+        <div class="Form__Group">
+          <Selector-Form
+            [Name]="this.GetSingleton().FormName.GroupInclude" [FormName]="NewObject"
+            DefaultValue="What Group you want to include ? "
+            [Values]="['GroupA' , 'GroupB']"
+          ></Selector-Form>
+        </div>
+      </div>
+      <!-- New Directory -->
+      <div *ngIf="NewObject.form.get(this.GetSingleton().FormName.NewObject) &&
+                  NewObject.form.get(this.GetSingleton().FormName.NewObject)?.value == 'New Group'">
+        <div class="Form__Group">
+          <input id="GroupName" type="text" class="Form__Input"
+                 ngModel name="Group_Name" placeholder="GroupName">
+          <label for="GroupName" class="Form__Label">Group Name</label>
+        </div>
+      </div>
+      <!-- Button Submit -->
+      <div class="PopUp__Buttons">
+        <button class="Button Button--Medium Button--Cyan"
+                (click)="this.OnSubmit(NewObject)">Create</button>
+        <button class="Button Button--Medium Button--Danger"
+                (click)="this.ClosePopup()">Cancel</button>
+      </div>
+    </form>
+  </div>
+</section>

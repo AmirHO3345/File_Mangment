@@ -1,0 +1,88 @@
+<section class="Permission_Section">
+  <div class="Container">
+    <div class="Permission__Box">
+      <form class="Permission__Form u-margin-bottom-Medium"
+            (ngSubmit)="this.OnSubmit(SingUpForm)" #SingUpForm='ngForm'>
+        <div class="u-margin-bottom-Medium u-text-align-Center">
+          <h2 class="Secondary_Header">Start By Register</h2>
+        </div>
+        <div class="Form__Group">
+          <input id="First_Name" type="text" class="Form__Input"
+                 ngModel [name]="this.GetSingleton().FormName.FirstName" placeholder="First Name" required>
+          <label for="First_Name" class="Form__Label">First Name</label>
+          <p class="Form__Error"
+             *ngIf="this.ErrorView.ErrorOccur.Error_Render &&
+             this.ErrorView.ErrorOccur.Error_Position == this.ErrorView.ErrorType().FirstName"
+          >
+            {{this.ErrorView.ErrorOccur.Error_Message}}
+          </p>
+        </div>
+        <div class="Form__Group">
+          <input id="Last_Name" type="text" class="Form__Input"
+                 ngModel [name]="this.GetSingleton().FormName.LastName" placeholder="Last Name" required>
+          <label for="Last_Name" class="Form__Label">Last Name</label>
+          <p class="Form__Error"
+             *ngIf="this.ErrorView.ErrorOccur.Error_Render &&
+             this.ErrorView.ErrorOccur.Error_Position == this.ErrorView.ErrorType().LastName"
+          >
+            {{this.ErrorView.ErrorOccur.Error_Message}}
+          </p>
+        </div>
+        <div class="Form__Group">
+          <input id="Email" type="email" class="Form__Input"
+                 ngModel [name]="this.GetSingleton().FormName.Email" placeholder="Email" email>
+          <label for="Email" class="Form__Label">Email</label>
+          <p class="Form__Error"
+             *ngIf="this.ErrorView.ErrorOccur.Error_Render &&
+             this.ErrorView.ErrorOccur.Error_Position == this.ErrorView.ErrorType().Email"
+          >
+            {{this.ErrorView.ErrorOccur.Error_Message}}
+          </p>
+        </div>
+        <div class="Form__Group">
+          <input id="Password" type="password" class="Form__Input"
+                 ngModel [name]="this.GetSingleton().FormName.Password" placeholder="Password" required>
+          <label for="Password" class="Form__Label">Password</label>
+          <p class="Form__Error"
+             *ngIf="this.ErrorView.ErrorOccur.Error_Render &&
+             this.ErrorView.ErrorOccur.Error_Position == this.ErrorView.ErrorType().Password"
+          >
+            {{this.ErrorView.ErrorOccur.Error_Message}}
+          </p>
+        </div>
+        <div class="Form__Group">
+          <div class="Form__Group-Radio">
+            <div class="Form__Radio">
+              <input id="Admin" type="radio" class="Form__Radio-Input"
+                     ngModel value="Admin" [name]="this.GetSingleton().FormName.Role" required>
+              <label for="Admin" class="Form__Radio-Label">
+                <span class="Form__Radio-Button">&nbsp;</span>
+                Admin
+              </label>
+            </div>
+            <div class="Form__Radio">
+              <input id="User" type="radio" class="Form__Radio-Input"
+                     ngModel value="User" [name]="this.GetSingleton().FormName.Role" required>
+              <label for="User" class="Form__Radio-Label">
+                <span class="Form__Radio-Button">&nbsp;</span>
+                User
+              </label>
+            </div>
+          </div>
+          <p class="Form__Error"
+             *ngIf="this.ErrorView.ErrorOccur.Error_Render &&
+             this.ErrorView.ErrorOccur.Error_Position == this.ErrorView.ErrorType().Role"
+          >
+            {{this.ErrorView.ErrorOccur.Error_Message}}
+          </p>
+        </div>
+        <div class="Form__Group u-text-align-Center">
+          <button class="Button Button--Large Button--Cyan Form__Submit">Register</button>
+        </div>
+      </form>
+      <div class="Permission__Navigate u-text-align-Center">
+        <p>If You Already Have Account <span><a [routerLink]="['/SignIn']">Sign-In</a></span></p>
+      </div>
+    </div>
+  </div>
+</section>

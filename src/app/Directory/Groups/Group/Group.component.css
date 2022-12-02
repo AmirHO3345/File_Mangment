@@ -1,0 +1,96 @@
+
+.Group {
+  position: relative ;
+  display: flex ;
+  align-items: center ;
+  flex-direction: column ;
+  gap : 10px ;
+  width : 100% ;
+  padding: 1rem ;
+  box-shadow: .5rem .7rem .5rem -.6rem rgba(0, 0, 0, 0.4);
+  transition: all .3s ;
+}
+
+.Group:hover {
+  padding: 1rem 1rem 4.5rem 1rem ;
+  transform: scale(1.05);
+  box-shadow: .5rem .7rem 1.5rem -.6rem rgba(0, 0, 0, .4);
+}
+
+.Group__Icon i {
+  font-size : 8rem ;
+  background-color: #00A8FF ;
+  border-radius: 50% ;
+  padding: 1rem ;
+  color : var(--whiteColor1);
+}
+
+.Group__Text {
+  text-align: center ;
+}
+
+.Group__Name {
+  font-size: 1.8rem;
+  font-weight: 900;
+  margin-bottom: 0.6rem;
+  color: var(--blackColor);
+  margin-bottom: 1rem ;
+}
+
+.Group__Details {
+  font-size: 1.3rem;
+  font-weight: 500;
+  color: var(--grayColor1);
+}
+
+.Group__Details:not(:last-child) {
+  margin-bottom: 1rem ;
+}
+
+.Focus {
+  font-family: sans-serif;
+  color: var(--grayColor1);
+  font-weight: 600;
+  text-transform: uppercase;
+  margin-left : .2rem ;
+}
+
+.Group__Options {
+  position: absolute ;
+  left : 50% ;
+  bottom: .5rem ;
+  width : 100% ;
+  transform: translateX(-50%);
+  opacity: 0 ;
+  visibility: hidden;
+  transition: all .3s ;
+}
+
+.Group:hover .Group__Options {
+  opacity: 1 ;
+  visibility: visible;
+}
+
+.Group__Options ul {
+  display: flex ;
+  align-items: center ;
+  justify-content: center ;
+  gap : 1.5rem ;
+  font-size: 2rem ;
+}
+
+.Group__Add {
+  color : var(--primaryColor) ;
+  border-radius: 50% ;
+  width : 3rem ;
+  height : 3rem ;
+  text-align: center ;
+  line-height: 3rem ;
+  cursor: pointer ;
+  transition: all .3s ;
+}
+
+.Group__Add:hover {
+  background-color: var(--primaryColor) ;
+  color : #fff ;
+}

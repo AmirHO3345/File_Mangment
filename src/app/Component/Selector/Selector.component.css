@@ -1,0 +1,85 @@
+.Form__Select {
+  display: flex;
+  width: 100% ;
+  flex-direction: column;
+  font-size: 1.6rem   ;
+}
+
+.Form__Select-Options {
+  background: #fff;
+  color: var(--blackColor);
+  width: 100%;
+  max-height: 0 ;
+  opacity: 0;
+  border-radius: var(--radiusBorder) ;
+  overflow: hidden;
+  order: 1;
+  transition: all 0.4s;
+}
+
+.Form__Select-Selected {
+  background: #d4d4d4;
+  border-radius: var(--radiusBorder) ;
+  margin-bottom: var(--radiusBorder) ;
+  color: var(--blackColor);
+  position: relative;
+  order: 0;
+  transition: all .4s ;
+}
+
+.Form__Select-Selected i {
+  position: absolute;
+  top: 50% ;
+  right: 1rem ;
+  transform: translateY(-50%);
+  transition: all 0.4s;
+}
+
+.Form__Select-Option {
+  background-color: #d4d4d4 ;
+}
+
+.Form__Select-Option:not(:last-child) {
+  margin-bottom: .5rem ;
+}
+
+.Form__Select-Options.Active {
+  max-height: 24rem ;
+  opacity: 1 ;
+  overflow-y: scroll ;
+}
+
+.Form__Select-Options::-webkit-scrollbar {
+  width: .8rem;
+  background: #0d141f;
+  border-radius: 0 var(--radiusBorder) var(--radiusBorder) 0;
+}
+
+.Form__Select-Options::-webkit-scrollbar-thumb {
+  background: #525861;
+  border-radius: 0 var(--radiusBorder) var(--radiusBorder) 0;
+}
+
+.Form__Select-Option ,
+.Form__Select-Selected {
+  padding: 1.2rem 2.4rem;
+  cursor: pointer;
+}
+
+.Form__Select-Input {
+  display: none ;
+}
+
+.Form__Select-Selected:hover {
+  background-color: var(--primaryColor);
+  color : var(--whiteColor1) ;
+}
+
+.Form__Select-Option:hover {
+  background: #9f9f9f;
+  color : #fff ;
+}
+
+.Form__Select-Label {
+  cursor: pointer;
+}

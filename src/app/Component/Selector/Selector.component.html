@@ -1,0 +1,23 @@
+<form #Selector='ngForm'>
+  <div class="Form__Select">
+    <div class="Form__Select-Options"
+          [ngClass]="{Active : this.OpenOption}">
+      <div class="Form__Select-Option"
+           *ngFor="let Option of this.SelectorValues ; let i=index"
+           (click)="this.onClickOption(Selector , Option) ;
+                    this.onCloseOption()">
+        <input type="radio" class="Form__Select-Input"
+               ngModel [id]="i" [value]="Option" [name]="this.SelectorName" />
+        <label class="Form__Select-Label"
+               [for]="i">{{Option}}</label>
+      </div>
+    </div>
+    <div class="Form__Select-Selected"
+          (click)="this.onOpenOption()">
+      {{(Selector.form.get(this.SelectorName)?.value) ?
+        Selector.form.get(this.SelectorName)?.value :
+        this.SelectorValueDefault}}
+      <i class='bx bx-caret-down'></i>
+    </div>
+  </div>
+</form>

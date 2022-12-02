@@ -1,0 +1,23 @@
+<div class="File" *ngIf="this.ItemFile">
+  <div class="File__Icon">
+    <i [class]='this.GetIconFile()'></i>
+  </div>
+  <div class="File__Text">
+    <h3 class="File__Name">{{this.ItemFile.FileInfo.FileName}}</h3>
+    <p class="File__Details">
+      Create By <span class="Focus">{{this.ItemFile.FileInfo.OwnerID}}</span>
+    </p>
+    <p class="File__Details">
+      Create in <span class="Focus">
+      {{this.DateTransformer.transform(this.ItemFile.FileInfo.Created_Date , 'yyyy.MM.dd')}}
+    </span>
+    </p>
+  </div>
+  <div class="File__Options">
+    <ul>
+      <li class="File__Add File__Add-User"><i class='bx bxs-file-plus'></i></li>
+      <li class="File__Add File__Add-File"><i class='bx bxs-user-plus'></i></li>
+      <li class="File__Add File__Add-Info"><i class='bx bxs-info-circle'></i></li>
+    </ul>
+  </div>
+</div>

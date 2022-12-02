@@ -1,0 +1,97 @@
+.Loader {
+  position: fixed ;
+  top : 0 ;
+  left : 0 ;
+  width : 100% ;
+  height : 100vh ;
+}
+
+.Loader__Overlay {
+  width : 100% ;
+  height : 100% ;
+  display: flex ;
+  justify-content: center ;
+  align-items: center ;
+  align-content: center ;
+}
+
+.Loader__Overlay.Cover {
+  background-color: #cccccc;
+}
+
+.Loader__Overlay.Opacity {
+  background-color: #0000004a ;
+}
+
+.Loader__Spinner {
+  width: 8vmax;
+  height: 8vmax;
+  border-right: 4px solid var(--primaryColor);
+  border-radius: 100%;
+  -webkit-animation: spinRight 800ms linear infinite;
+  animation: spinRight 800ms linear infinite;
+}
+
+.Loader__Spinner:before,
+.Loader__Spinner:after {
+  content: "";
+  width: 6vmax;
+  height: 6vmax;
+  display: block;
+  position: absolute;
+  top: calc(50% - 3vmax);
+  left: calc(50% - 3vmax);
+  border-left: 3px solid var(--primaryColor);
+  border-radius: 100%;
+  -webkit-animation: spinLeft 800ms linear infinite;
+  animation: spinLeft 800ms linear infinite;
+}
+
+.Loader__Spinner:after {
+  width: 4vmax;
+  height: 4vmax;
+  top: calc(50% - 2vmax);
+  left: calc(50% - 2vmax);
+  border: 0;
+  border-right: 2px solid var(--primaryColor);
+  -webkit-animation: none;
+  animation: none;
+}
+
+@-webkit-keyframes spinLeft {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(720deg);
+  }
+}
+
+@keyframes spinLeft {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(720deg);
+  }
+}
+
+@-webkit-keyframes spinRight {
+  from {
+    transform: rotate(360deg);
+  }
+  to {
+    transform: rotate(0deg);
+  }
+}
+
+@keyframes spinRight {
+  from {
+    transform: rotate(360deg);
+  }
+  to {
+    transform: rotate(0deg);
+  }
+}
+
+

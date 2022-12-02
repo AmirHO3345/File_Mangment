@@ -1,0 +1,23 @@
+<div class="Group" *ngIf="this.Group_Item">
+  <div class="Group__Icon">
+    <i class='bx bx-group'></i>
+  </div>
+  <div class="Group__Text">
+    <h3 class="Group__Name">{{this.Group_Item.Name}}</h3>
+    <p class="Group__Details">
+      Create By <span class="Focus">{{this.Group_Item.Admin}}</span>
+    </p>
+    <p class="Group__Details">
+      Create in <span class="Focus">
+      {{this.DateTransformer.transform(this.Group_Item.Date_Create , 'yyyy.MM.dd')}}
+    </span>
+    </p>
+  </div>
+  <div class="Group__Options">
+    <ul>
+      <li class="Group__Add Group__Add-User"><i class='bx bxs-file-plus'></i></li>
+      <li class="Group__Add Group__Add-File"><i class='bx bxs-user-plus'></i></li>
+      <li class="Group__Add Group__Add-Info"><i class='bx bxs-info-circle'></i></li>
+    </ul>
+  </div>
+</div>

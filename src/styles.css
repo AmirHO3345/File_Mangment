@@ -1,0 +1,400 @@
+/* Root Variable */
+
+:root {
+  --primaryColor : #2759A5 ;
+  --secandryColor : #fff ;
+  --primaryColor_Diactivated : rgba(41, 90, 164, 0.51);
+  --whiteColor1 : #eaeaea;
+  --grayColor1 : #777 ;
+  --blackColor : #565555;
+  --paragraphColor : #3a3a3a ;
+  --dangerColor : #df1212 ;
+  --radiusBorder : .5rem ;
+}
+
+/* Reset Page */
+
+* ,
+*::after ,
+*::before {
+  margin : 0 ;
+  padding: 0 ;
+  box-sizing: inherit ;
+}
+
+html {
+  font-size: 62.5%;
+}
+
+body {
+  box-sizing: border-box ;
+  font-family: lato , sans-serif ;
+  font-weight: 400 ;
+
+  height : 10000px ;
+}
+
+ul {
+  list-style: none ;
+}
+
+a {
+  text-decoration: none ;
+}
+
+.Container {
+  width : 100% ;
+  height : 100% ;
+  padding: 0 15px ;
+}
+
+/* Utility */
+
+.u-text-align-Center {
+  text-align: center ;
+}
+
+.u-margin-bottom-Medium {
+  margin-bottom: 4rem !important;
+}
+
+.u-top-render {
+  z-index: 5 ;
+}
+
+.u-top-low-render {
+  z-index: 4 ;
+}
+
+.u-middle-render {
+  z-index: 3 ;
+}
+
+.u-middle-low-render {
+  z-index: 2 ;
+}
+
+.u-low-render {
+  z-index: 1 ;
+}
+
+/* Typography */
+
+.Secondary_Header {
+  font-size: 3rem ;
+  text-transform: uppercase ;
+  letter-spacing: 2px;
+  font-weight: 700 ;
+  background-image: linear-gradient(to right bottom , var(--primaryColor) , var(--primaryColor_Diactivated));
+  -webkit-background-clip: text ;
+  color : transparent ;
+}
+
+.Paragraph {
+  font-size: 1.35rem;
+  line-height: 1.5;
+  color : var(--paragraphColor);
+}
+
+/* Form Components */
+
+.Form__Group {
+  width : 100% ;
+  position: relative ;
+}
+
+.Form__Group:not(:last-child) {
+  margin-bottom: 3.5rem ;
+}
+
+.Form__Input {
+  display: block ;
+  width : 100% ;
+  padding: 1rem 2rem ;
+  font-family: inherit ;
+  font-size: 1.5rem ;
+  background-color: #fff ;
+  color : var(--grayColor1) ;
+  border : 2px solid #0000002b ;
+  border-radius: var(--radiusBorder) ;
+  transition: all .4s;
+}
+
+.Form__Input:focus ,
+.Form__Input:not(:placeholder-shown) {
+  outline: none ;
+  border : 2px solid var(--primaryColor);
+}
+
+.Form__Input::placeholder {
+  color : transparent ;
+}
+
+.Form__Label {
+  position: absolute ;
+  top : 1.1rem ;
+  left : 2.1rem ;
+  font-size: 1.6rem ;
+  background-color: #fff ;
+  font-weight: 700;
+  color : var(--blackColor) ;
+  transition: all .3s;
+}
+
+.Form__Input:focus ~ .Form__Label ,
+.Form__Input:not(:placeholder-shown) ~ .Form__Label {
+  top: 0;
+  left: 1.5rem;
+  transform: translateY(-50%);
+  font-size: 1.3rem;
+  color : var(--primaryColor) ;
+}
+
+.Form__Group-Radio ,
+.Form__Group-Checkbox {
+  display: flex ;
+  gap : 2rem ;
+  flex-wrap: wrap ;
+}
+
+.Form__Radio-Input ,
+.Form__Checkbox-Input ,
+.Form__File-Input {
+  display: none ;
+}
+
+.Form__Radio-Label ,
+.Form__Checkbox-Label {
+  position: relative;
+  font-size: 1.6rem;
+  cursor: pointer;
+  padding-left: 3rem ;
+  color : var(--blackColor);
+}
+
+.Form__Radio-Button {
+  position: absolute ;
+  display: inline-block ;
+  top : 50% ;
+  left : 0 ;
+  width : 2rem ;
+  height: 2rem ;
+  border : .3rem solid var(--primaryColor) ;
+  border-radius: 50% ;
+  transform: translateY(-50%);
+}
+
+.Form__Checkbox-Button {
+  position: absolute ;
+  display: inline-block ;
+  top : 50% ;
+  left : 0 ;
+  width : 2rem ;
+  height: 2rem ;
+  border : .3rem solid var(--primaryColor) ;
+  border-radius: var(--radiusBorder) ;
+  transform: translateY(-50%);
+}
+
+.Form__Radio-Button::after {
+  content: '' ;
+  position: absolute ;
+  display: block;
+  top : 50% ;
+  left : 50% ;
+  width : 1rem ;
+  height : 1rem ;
+  background-color: var(--primaryColor) ;
+  border-radius: 50% ;
+  transform: translate(-50% , -50%);
+  opacity: 0 ;
+  transition: opacity .2s;
+}
+
+.Form__Checkbox-Button::after {
+  content: '' ;
+  position: absolute ;
+  display: block;
+  top : 50% ;
+  left : 50% ;
+  width : 1.1rem ;
+  height : 1.1rem ;
+  background-color: var(--primaryColor) ;
+  transform: translate(-50% , -50%);
+  opacity: 0 ;
+  transition: opacity .2s;
+}
+
+.Form__Radio-Input:checked ~ .Form__Radio-Label .Form__Radio-Button:after ,
+.Form__Checkbox-Input:checked ~ .Form__Checkbox-Label .Form__Checkbox-Button:after {
+  opacity: 1 ;
+}
+
+.Form__Error {
+  margin-top : 1rem ;
+  color: var(--dangerColor) ;
+}
+
+.Form__File-Label {
+  display: flex ;
+  align-items: center ;
+  gap : 1.5rem ;
+  cursor: pointer;
+}
+
+.Form__File-Button {
+  background-color: #ccc;
+  padding: 1rem 1.5rem;
+  border-radius: var(--radiusBorder);
+  font-size: 1.5rem;
+  transition: all .3s;
+}
+
+.Form__File-Button:hover {
+  color : var(--whiteColor1);
+  background-color: var(--primaryColor) ;
+}
+
+.Form__File-Path {
+  font-size: 1.3rem;
+  color: #777;
+}
+
+/* Button Components */
+
+.Button {
+  position: relative;
+  display: inline-block;
+  border-radius: var(--radiusBorder) ;
+  border: none;
+  text-transform: uppercase;
+  font-size: 1.6rem;
+  outline: none;
+  cursor: pointer;
+  transition: all .3s;
+}
+
+.Button--Large {
+  padding: 1.5rem 4rem;
+  font-size: 1.6rem;
+}
+
+.Button--Medium {
+  padding: 1.25rem 3rem;
+  font-size: 1.3rem;
+}
+
+.Button--Small {
+  padding: 1rem 2rem;
+  font-size: 1rem;
+}
+
+.Button--Cyan {
+  background-color: var(--primaryColor_Diactivated) ;
+  color : var(--whiteColor1);
+  opacity: .8 ;
+}
+
+.Button--Danger {
+  color : #fff ;
+  background-color: var(--dangerColor) ;
+  opacity: .5 ;
+}
+
+.Button--Danger:hover {
+  opacity: 1 ;
+}
+
+.Button--Cyan:hover {
+  background-color: var(--primaryColor) ;
+  opacity: 1 ;
+}
+
+/* Popup Component */
+
+.PopUp {
+  width: 100%;
+  height: 100vh;
+  background-color: rgba(0 , 0 , 0 , .8);
+  position: fixed;
+  top: 0;
+  left: 0;
+  opacity: 0;
+  visibility: hidden;
+  transition: all 0.4s;
+}
+
+.PopUp.Show {
+  opacity: 1 ;
+  visibility: visible ;
+}
+
+.PopUp__Header {
+  position: relative;
+}
+
+.PopUp__Close {
+  position: absolute ;
+  top : 2.5rem ;
+  right : 2.5rem ;
+  font-size: 3rem ;
+  color : #fff ;
+  cursor: pointer ;
+  transition: all .2s;
+}
+
+.PopUp__Content {
+  position: absolute ;
+  top : 50% ;
+  left : 50% ;
+  background-color: #fff ;
+  box-shadow: 0 2rem 4rem rgba(0 , 0 , 0 , .2);
+  border-radius: var(--radiusBorder) ;
+  overflow: hidden ;
+  opacity: 0 ;
+  padding: 1rem ;
+  visibility: hidden ;
+  transform: translate(-50% , -50%) scale(.25);
+  transition: all .4s .2s ;
+
+  height : 75% ;
+}
+
+.PopUp__Content--Large {
+  width : 75% ;
+}
+
+.PopUp__Content--Medium {
+  width : 50% ;
+}
+
+.PopUp__Content--Small {
+  width : 30% ;
+}
+
+.PopUp__Container {
+  width: 100% ;
+  overflow-y: scroll ;
+  max-height: 38rem ;
+}
+
+.PopUp.Show .PopUp__Content {
+  opacity: 1 ;
+  visibility: visible ;
+  transform: translate(-50% , -50%) scale(1);
+}
+
+.PopUp__Buttons {
+  display: flex;
+  position: absolute;
+  width: 100%;
+  bottom: 0;
+  left: 0;
+  box-shadow: 0 -1.5rem 4rem rgb(0 0 0 / 20%);
+  align-items: center;
+  justify-content: flex-end;
+  gap: 1.5rem;
+  padding: 1.2rem;
+}
+
+/* Loader Component */

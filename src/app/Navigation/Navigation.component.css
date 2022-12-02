@@ -1,0 +1,111 @@
+.NavMenu {
+  position : fixed ;
+  top : 0 ;
+  left : 0 ;
+  height : 100vh ;
+  width : 24rem ;
+  max-width : 100% ;
+  background-color : var(--primaryColor) ;
+  padding : .6rem 1.4rem ;
+}
+
+.NavMenu__Header {
+  position : relative ;
+}
+
+.NavMenu__Logo {
+  display: flex;
+  color: var(--whiteColor1);
+  width: 100%;
+  gap: 0.5rem;
+  padding: 2.5rem 0;
+  align-items: center;
+}
+
+.NavMenu__Logo i {
+  font-size : 2.8rem ;
+}
+
+.NavMenu__Logo .NavMenu__NameSite {
+  font-size : 2rem ;
+  font-weight : 400 ;
+}
+
+.NavMenu__Buttons {
+  margin-top : 20px ;
+}
+
+.NavMenu__Buttons ul li {
+  position : relative ;
+  width : 100% ;
+  margin : 1rem 0;
+  font-size : 1.6rem  ;
+}
+
+.NavMenu__Buttons ul li a:link ,
+.NavMenu__Buttons ul li a:visited {
+  color : var(--whiteColor1) ;
+  display : flex ;
+  align-items : center ;
+  gap : 2.5rem ;
+  padding : 1.5rem 1rem ;
+  border-radius : var(--radiusBorder);
+  transition : all .3s ;
+}
+
+.NavMenu__Buttons ul li.NavMenu__Button-Link a:hover ,
+.NavMenu__Buttons ul li.NavMenu__Button-Link a:active {
+  color : var(--primaryColor) ;
+  background-color : var(--secandryColor) ;
+}
+
+.NavMenu__Buttons ul li.NavMenu__Button-Action a:hover ,
+.NavMenu__Buttons ul li.NavMenu__Button-Action a:active {
+  color : var(--grayColor1) ;
+  background-color : var(--secandryColor) ;
+}
+
+.NavMenu__User {
+  position: absolute ;
+  width : 100% ;
+  color : var(--whiteColor1) ;
+  bottom: 0 ;
+  left : 0 ;
+  padding: .6rem 1.4rem ;
+}
+
+.NavMenu__User-Details {
+  display: flex ;
+  color : var(--whiteColor1) ;
+  position: relative ;
+  padding : 1rem .6rem ;
+  align-items: center ;
+  gap : 1.5rem ;
+}
+
+.NavMenu__User-Details img {
+  width : 4.5rem ;
+  height : 4.5rem ;
+  object-fit: cover ;
+  border-radius: var(--radiusBorder);
+}
+
+.NavMenu__User-Details .NavMenu__User-Name {
+  font-family: cursive ;
+  font-size: 2rem;
+  font-weight: 600;
+  margin-bottom: .2rem ;
+}
+
+.NavMenu__User-Details .NavMenu__User-Role {
+  font-size: 1.2rem ;
+}
+
+.NavMenu__User-Details .NavMenu__User-Logout {
+  position: absolute ;
+  top : 50% ;
+  right : 0 ;
+  transform: translateY(-50%);
+  font-size: 1.5rem ;
+  cursor: pointer ;
+}
