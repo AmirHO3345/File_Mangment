@@ -12,12 +12,13 @@ import {ObjectCreateComponent} from "./ObjectCreate/ObjectCreate.component";
 import {SelectorComponent} from "./Component/Selector/Selector.component";
 import {DirectoryComponent} from "./Directory/Directory.component";
 import {GroupComponent} from "./Directory/Groups/Group/Group.component";
-import {GroupsComponent} from "./Directory/Groups/Groups.component";
 import {LoaderComponent} from "./Component/Loader/Loader.component";
 import {ReportComponent} from "./Report/Report.component";
 import {FileComponent} from "./Directory/Files/File/File.component";
-import {FilesComponent} from "./Directory/Files/Files.component";
 import {DatePipe} from "@angular/common";
+import {ErrorPageComponent} from "./Error/ErrorPage.component";
+import {GroupsIncludedComponent, GroupsPrivateComponent} from "./Directory/Groups/Groups.component";
+import {GlobalFilesComponent, PrivateFilesComponent} from "./Directory/Files/Files.component";
 
 @NgModule({
   declarations: [
@@ -29,11 +30,14 @@ import {DatePipe} from "@angular/common";
     SelectorComponent ,
     DirectoryComponent ,
     GroupComponent ,
-    GroupsComponent ,
+    GroupsPrivateComponent ,
+    GroupsIncludedComponent ,
     LoaderComponent ,
     ReportComponent ,
     FileComponent ,
-    FilesComponent
+    GlobalFilesComponent ,
+    PrivateFilesComponent ,
+    ErrorPageComponent
   ],
   imports: [
     BrowserModule,

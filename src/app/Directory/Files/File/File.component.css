@@ -22,7 +22,7 @@
   background-color: #00A8FF ;
   border-radius: 50% ;
   padding: 1rem ;
-  color : var(--whiteColor1);
+  color : #fff ;
 }
 
 .File__Text {
@@ -78,8 +78,7 @@
   font-size: 2rem ;
 }
 
-.File__Add {
-  color : var(--primaryColor) ;
+.File__Button {
   border-radius: 50% ;
   width : 3rem ;
   height : 3rem ;
@@ -89,7 +88,20 @@
   transition: all .3s ;
 }
 
-.File__Add:hover {
+.File__Button--Add {
+  color : var(--primaryColor) ;
+}
+
+.File__Button--Remove {
+  color : var(--dangerColor) ;
+}
+
+.File__Button--Add:hover {
   background-color: var(--primaryColor) ;
+  color : #fff ;
+}
+
+.File__Button--Remove:hover {
+  background-color: var(--dangerColor) ;
   color : #fff ;
 }

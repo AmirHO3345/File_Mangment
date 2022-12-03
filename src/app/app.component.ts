@@ -16,28 +16,25 @@ export class AppComponent implements OnInit{
 
   constructor(public AuthenticationProcess : AuthenticationService ,
               public ProcessRouting : RoutingProcessService) {
-    // this.LoadProcess = true ;
-    // this.IsLogin = false ;
-
-    this.LoadProcess = false ;
-    this.IsLogin = true ;
+    this.LoadProcess = true ;
+    this.IsLogin = false ;
   }
 
   ngOnInit(): void {
-    // const LoginProcess = this.AuthenticationProcess.AutoLogin() ;
-    // if(LoginProcess instanceof Observable)
-    //   LoginProcess.subscribe(() => {
-    //     this.LoadProcess = false ;
-    //     this.IsLogin = true ;
-    //     this.ProcessRouting.Route2MainPage() ;
-    //   } , () => {
-    //     this.LoadProcess = this.IsLogin = false ;
-    //     this.ProcessRouting.Route2Login();
-    //   });
-    // else {
-    //   this.LoadProcess = this.IsLogin = false ;
-    //   this.ProcessRouting.Route2Login();
-    // }
+    const LoginProcess = this.AuthenticationProcess.AutoLogin() ;
+    if(LoginProcess instanceof Observable)
+      LoginProcess.subscribe(() => {
+        this.LoadProcess = false ;
+        this.IsLogin = true ;
+        this.ProcessRouting.Route2MainPage() ;
+      } , () => {
+        this.LoadProcess = this.IsLogin = false ;
+        this.ProcessRouting.Route2Login();
+      });
+    else {
+      this.LoadProcess = this.IsLogin = false ;
+      this.ProcessRouting.Route2Login();
+    }
   }
 
 }

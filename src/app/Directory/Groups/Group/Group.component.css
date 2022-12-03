@@ -22,7 +22,7 @@
   background-color: #00A8FF ;
   border-radius: 50% ;
   padding: 1rem ;
-  color : var(--whiteColor1);
+  color : #fff ;
 }
 
 .Group__Text {
@@ -32,9 +32,9 @@
 .Group__Name {
   font-size: 1.8rem;
   font-weight: 900;
-  margin-bottom: 0.6rem;
   color: var(--blackColor);
   margin-bottom: 1rem ;
+  cursor: pointer ;
 }
 
 .Group__Details {
@@ -79,8 +79,8 @@
   font-size: 2rem ;
 }
 
-.Group__Add {
-  color : var(--primaryColor) ;
+.Group__Button {
+
   border-radius: 50% ;
   width : 3rem ;
   height : 3rem ;
@@ -90,7 +90,20 @@
   transition: all .3s ;
 }
 
-.Group__Add:hover {
+.Group__Button--Add {
+  color : var(--primaryColor) ;
+}
+
+.Group__Button--Remove {
+  color: var(--dangerColor) ;
+}
+
+.Group__Button--Add:hover {
   background-color: var(--primaryColor) ;
+  color : #fff ;
+}
+
+.Group__Button--Remove:hover {
+  background-color: var(--dangerColor) ;
   color : #fff ;
 }

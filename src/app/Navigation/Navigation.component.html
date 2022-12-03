@@ -8,26 +8,29 @@
   <nav class="NavMenu__Buttons">
     <ul>
       <li class="NavMenu__Button-Link">
-        <a href="#">
+        <a [routerLink]="[ '/' , 'publicGroup']"
+           routerLinkActive="activeRoute" >
           <i class='bx bx-planet' ></i>
           <span class="NavMenu__ButtonName">Public Group</span>
         </a>
       </li>
       <li class="NavMenu__Button-Link">
-        <a href="#">
+        <a [routerLink]="[ '/' , 'privateGroup']"
+           routerLinkActive="activeRoute" >
           <i class='bx bx-shape-triangle'></i>
           <span class="NavMenu__ButtonName">Private Groups</span>
         </a>
       </li>
       <li class="NavMenu__Button-Link">
-        <a href="#">
-          <i class='bx bx-user-circle' ></i>
-          <span class="NavMenu__ButtonName">Profile</span>
+        <a [routerLink]="[ '/' , 'includedGroup']"
+           routerLinkActive="activeRoute" >
+          <i class='bx bx-shape-triangle'></i>
+          <span class="NavMenu__ButtonName">Included Groups</span>
         </a>
       </li>
       <li class="NavMenu__Button-Action"
           (click)="OpenPopup()">
-        <a [routerLink]="['./']">
+        <a [routerLink]="['./']" >
           <i class='bx bxs-plus-circle'></i>
           <span class="NavMenu__ButtonName">New</span>
         </a>

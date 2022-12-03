@@ -92,7 +92,9 @@ export class AuthenticationService {
     return this.Request.get<PersonResponse>(`${Singleton.API}api/filemanagement/auth/user` , {
       headers : new HttpHeaders({"Authorization" : `${Token}`})})
       .pipe(map(Response => {
-        return this.AdapterProcess.Convert2Account(Response) ;
+        const CurrentAccount = this.AdapterProcess.Convert2Account(Response) ;
+        CurrentAccount.setToken(Token);
+        return CurrentAccount ;
       }));
   }
 

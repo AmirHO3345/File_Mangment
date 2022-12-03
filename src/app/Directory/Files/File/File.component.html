@@ -15,9 +15,23 @@
   </div>
   <div class="File__Options">
     <ul>
-      <li class="File__Add File__Add-User"><i class='bx bxs-file-plus'></i></li>
-      <li class="File__Add File__Add-File"><i class='bx bxs-user-plus'></i></li>
-      <li class="File__Add File__Add-Info"><i class='bx bxs-info-circle'></i></li>
+      <li class="File__Button File__Button--Remove"
+          (click)="this.SendCommand(this.GetAllCommands().Delete)"
+          *ngIf="this.ItemFile.GetPermission().CanDelete">
+        <i class='bx bxs-x-circle'></i></li>
+      <li class="File__Button File__Button--Add"
+          (click)="this.SendCommand(this.GetAllCommands().Report)"
+          *ngIf="this.ItemFile.GetPermission().CanReport">
+        <i class='bx bxs-report'></i></li>
+      <li class="File__Button File__Button--Add"
+          (click)="this.SendCommand(this.GetAllCommands().Booking)"
+          *ngIf="!this.ItemFile.IsBooking()">
+        <i class='bx bxs-bookmark-star'></i></li>
+      <li class="File__Button File__Button--Remove"
+          (click)="this.SendCommand(this.GetAllCommands().NotBooking)"
+          *ngIf="this.ItemFile.IsBooking() &&
+                 this.ItemFile.GetPermission().CanNotBooking">
+        <i class='bx bxs-bookmark-minus' ></i></li>
     </ul>
   </div>
 </div>

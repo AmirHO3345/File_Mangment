@@ -6,7 +6,6 @@ import {Singleton} from "../../Models/Singleton";
 import {RoutingProcessService} from "../../Routing/RoutingProcess.service";
 
 @Component({
-  selector : `SignIn` ,
   templateUrl : `./SignIn.html`,
   styleUrls : [`../Authentication.css`]
 })

@@ -3,5 +3,6 @@
   <Group_Item
     *ngFor="let Item of this.Group_Items"
     [SetData]="Item"
+    (GetCommand)="this.ParserCommandGroup($event)"
     ></Group_Item>
 </div>

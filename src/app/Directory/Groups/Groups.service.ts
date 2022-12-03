@@ -35,15 +35,17 @@ export class GroupsService {
   constructor(private Request : HttpClient ,
               private AuthenticationProcess : AuthenticationService ,
               private AdapterProcess : AdapterService) {
-    this.AccountUser = this.AuthenticationProcess.AccountSnapshot() as Person ;
+    this.AuthenticationProcess.ListenAccount().subscribe(Value => {
+      if(Value != null)
+        this.AccountUser = Value ;
+    }) ;
   }
 
   public CreateGroup(Name : string) {
     return this.Request.post<GroupsResponse>(`${Singleton.API}api/filemanagement/group/create` , {
       name : Name ,
-      type : `private`
-    }
-    , { headers : new HttpHeaders({'Authorization' : this.AccountUser.getToken()})
+      type : 'private'
+    } , { headers : new HttpHeaders({'Authorization' : this.AccountUser.getToken()})
     }).pipe(map(Response => {
         if(Response.data.group)
           return this.AdapterProcess.Convert2Group(Response.data.group) ;
@@ -60,21 +62,22 @@ export class GroupsService {
       body : {
         id_group : GroupID
       }
-    })
-      .pipe(catchError(ErrorValue => {
+    }).pipe(catchError(ErrorValue => {
       throw '' ;
     }));
   }
 
-  public ShowMyGroups() {
-    return this.Request.get<GroupsResponse>(`${Singleton.API}api/filemanagement/group/all` , {
+  public ShowOwnerGroups() {
+    return this.Request.get<GroupsResponse>(`${Singleton.API}api/filemanagement/group/show` , {
       headers : new HttpHeaders({'Authorization' : this.AccountUser.getToken()})
     }).pipe(map(Response => {
       const GroupsValue : Group[] = [] ;
       if(Response.data.groups)
-        Response.data.groups.forEach(Value =>
-          GroupsValue.push(this.AdapterProcess.Convert2Group(Value))
-        );
+        Response.data.groups.forEach(Value => {
+            const GroupResult = this.AdapterProcess.Convert2Group(Value) ;
+            GroupResult.SetPermission(this.GrantPermission(GroupResult));
+            GroupsValue.push(GroupResult) ;
+          });
       return GroupsValue ;
     }) , catchError(ErrorValue => {
       throw '' ;
@@ -82,7 +85,41 @@ export class GroupsService {
   }
 
   public ShowIncludeGroups() {
+    return this.Request.get<GroupsResponse>(`${Singleton.API}api/filemanagement/` , {
+      headers : new HttpHeaders({'Authorization' : this.AccountUser.getToken()})
+    }).pipe(map(Response => {
+      const GroupsValue : Group[] = [] ;
+      if(Response.data.groups)
+        Response.data.groups.forEach(Value => {
+            const GroupResult = this.AdapterProcess.Convert2Group(Value) ;
+            GroupResult.SetPermission(this.GrantPermission(GroupResult));
+            GroupsValue.push(GroupResult) ;
+          });
+      return GroupsValue ;
+    }) , catchError(ErrorValue => {
+      throw '' ;
+    }));
+  }
 
+  public GetAllGroups() {
+    return this.Request.get<GroupsResponse>(`${Singleton.API}api/filemanagement/group/show` , {
+      headers : new HttpHeaders({'Authorization' : this.AccountUser.getToken()})
+    }).pipe(map(Response => {
+        const GroupArray : Group[] = [] ;
+        if(Response.data.groups)
+          Response.data.groups.forEach(Value =>
+            GroupArray.push(this.AdapterProcess.Convert2Group(Value)));
+        return GroupArray ;
+      }));
+  }
+
+  private GrantPermission(Group_Item : Group) {
+    const AllowPermission = this.AccountUser.getTypePerson() === "Admin" ||
+      Group_Item.Admin.ID === this.AccountUser.ID ;
+    return {
+      Report : AllowPermission ,
+      Delete : AllowPermission
+    }
   }
 
 }

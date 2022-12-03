@@ -44,20 +44,9 @@
 }
 
 .Form__Select-Options.Active {
-  max-height: 24rem ;
+  max-height: 10rem ;
   opacity: 1 ;
-  overflow-y: scroll ;
-}
-
-.Form__Select-Options::-webkit-scrollbar {
-  width: .8rem;
-  background: #0d141f;
-  border-radius: 0 var(--radiusBorder) var(--radiusBorder) 0;
-}
-
-.Form__Select-Options::-webkit-scrollbar-thumb {
-  background: #525861;
-  border-radius: 0 var(--radiusBorder) var(--radiusBorder) 0;
+  overflow-y: auto ;
 }
 
 .Form__Select-Option ,

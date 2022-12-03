@@ -7,7 +7,8 @@
            (click)="this.onClickOption(Selector , Option) ;
                     this.onCloseOption()">
         <input type="radio" class="Form__Select-Input"
-               ngModel [id]="i" [value]="Option" [name]="this.SelectorName" />
+               ngModel [id]="i" [value]="Option" [name]="this.SelectorName"
+               [required]="this.RequireSelector" />
         <label class="Form__Select-Label"
                [for]="i">{{Option}}</label>
       </div>

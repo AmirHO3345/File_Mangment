@@ -33,8 +33,8 @@ export class AdapterService {
       DataResponse.id ,
       DataResponse.name ,
       {
-        id : DataResponse.owner.id ,
-        name : DataResponse.owner.name
+        id : 1 , //Temp
+        name : 'amir' //Temp
       } ,
       new Date(DataResponse.created_at)
     ) ;

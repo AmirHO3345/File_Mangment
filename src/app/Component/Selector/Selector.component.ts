@@ -1,6 +1,5 @@
-import {Component, Input} from "@angular/core";
+import {AfterViewInit, Component, Input, ViewChild} from "@angular/core";
 import {NgForm} from "@angular/forms";
-import {Singleton} from "../../Models/Singleton";
 
 @Component({
   selector : 'Selector-Form' ,
@@ -10,6 +9,8 @@ import {Singleton} from "../../Models/Singleton";
 export class SelectorComponent {
 
   @Input('Name') SelectorName : string ;
+
+  @Input('Require') RequireSelector : boolean ;
 
   @Input('FormName') SelectorForm !: NgForm ;
 
@@ -24,14 +25,13 @@ export class SelectorComponent {
     this.OpenOption = false ;
     this.SelectorValues = [] ;
     this.SelectorValueDefault = '' ;
+    this.RequireSelector = false ;
   }
 
   onClickOption(FormInfo : NgForm , Value : string) {
-    console.log('Before' ,this.SelectorForm);
     FormInfo.form.controls[this.SelectorName].setValue(Value)  ;
     this.SelectorForm.form.controls[this.SelectorName] =
       FormInfo.form.controls[this.SelectorName] ;
-    console.log('After' ,this.SelectorForm);
   }
 
   onOpenOption() {

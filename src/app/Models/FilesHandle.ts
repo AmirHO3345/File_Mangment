@@ -1,4 +1,3 @@
-import {Singleton} from "./Singleton";
 
 interface FileInfo {
 
@@ -19,18 +18,49 @@ interface FileInfo {
 
 }
 
+export interface FileComponent {
+
+  ItemsFile : Files[] ;
+
+  ParserCommandFile(FileInfo : {
+    FileID : number ,
+    FileCommand : CommandsFile
+  }) : void ;
+
+}
+
 export abstract class Files {
 
   abstract FileInfo : FileInfo ;
 
   abstract Type : 'Image' | 'Text' | 'Video' ;
 
-  IsBooking() {
+  private Permission !: {
+    CanReport : boolean ,
+    CanDelete : boolean ,
+    CanNotBooking : boolean ,
+  } ;
+
+  public IsBooking() {
     return !!this.FileInfo.User_Booking ;
   }
 
-  GetPath() {
-    return Singleton.API.concat( '/' , this.FileInfo.Path) ;
+  public SetPermission(PermissionGrant : {
+    Report : boolean ,
+    Delete : boolean ,
+    NotBooking : boolean
+  }) {
+    if(this.Permission === undefined) {
+      this.Permission = {
+        CanReport : PermissionGrant.Report ,
+        CanDelete : PermissionGrant.Delete ,
+        CanNotBooking : PermissionGrant.NotBooking
+      } ;
+    }
+  }
+
+  public GetPermission() {
+    return {...this.Permission};
   }
 
 }
@@ -96,4 +126,12 @@ class TextFile extends Files {
     this.Type = "Text" ;
   }
 
+}
+
+export enum CommandsFile {
+  Booking ,
+  Delete ,
+  Report ,
+  NotBooking,
+  Download
 }

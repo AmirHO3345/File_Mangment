@@ -3,7 +3,8 @@
     <i class='bx bx-group'></i>
   </div>
   <div class="Group__Text">
-    <h3 class="Group__Name">{{this.Group_Item.Name}}</h3>
+    <h3 class="Group__Name"
+    (dblclick)="this.SendCommand(this.GetAllCommands().GroupEnter)">{{this.Group_Item.Name}}</h3>
     <p class="Group__Details">
       Create By <span class="Focus">{{this.Group_Item.Admin}}</span>
     </p>
@@ -15,9 +16,14 @@
   </div>
   <div class="Group__Options">
     <ul>
-      <li class="Group__Add Group__Add-User"><i class='bx bxs-file-plus'></i></li>
-      <li class="Group__Add Group__Add-File"><i class='bx bxs-user-plus'></i></li>
-      <li class="Group__Add Group__Add-Info"><i class='bx bxs-info-circle'></i></li>
+      <li class="Group__Button Group__Button--Remove"
+          (click)="this.SendCommand(this.GetAllCommands().DeleteGroup)"
+          *ngIf="this.Group_Item.GetPermission().CanDelete">
+        <i class='bx bxs-x-circle'></i></li>
+      <li class="Group__Button Group__Button--Add"
+          (click)="this.SendCommand(this.GetAllCommands().ReportEnter)"
+          *ngIf="this.Group_Item.GetPermission().CanReport">
+        <i class='bx bxs-info-circle'></i></li>
     </ul>
   </div>
 </div>

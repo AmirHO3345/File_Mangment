@@ -1,7 +1,7 @@
 
 export class Singleton {
 
-  static readonly API = 'http://192.168.43.181:8000/' ;
+  static readonly API = 'http://localhost/FilesManagementSystem/public/' ;
 
   static readonly FormName = {
     Email : 'Email' ,
@@ -13,7 +13,10 @@ export class Singleton {
     FileName : 'File_Name' ,
     FileUpload : 'FileUpload' ,
     NewObject : 'New_Object' ,
-    GroupInclude : 'GroupInclude'
+    GroupInclude : 'GroupInclude' ,
+    GroupNameInput : 'Group_Name'
   } ;
+
+  static readonly RouteName = {} ;
 
 }

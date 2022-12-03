@@ -1,130 +1,142 @@
 import {Component, OnInit} from "@angular/core";
-import {FileFactory, Files} from "../../Models/FilesHandle";
+import {CommandsFile, FileComponent, Files} from "../../Models/FilesHandle";
+import {FilesService} from "./Files.service";
+import {RoutingProcessService} from "../../Routing/RoutingProcess.service";
 
 @Component({
-  selector : 'File_Items' ,
   templateUrl : './Files.component.html' ,
   styleUrls : ['./Files.component.css']
 })
-export class FilesComponent implements OnInit {
+export class GlobalFilesComponent implements OnInit , FileComponent {
 
-  ItemsFile : Files[] ;
+  ItemsFile: Files[];
 
-  constructor() {
+  constructor(private FileProcess : FilesService) {
     this.ItemsFile = [] ;
   }
 
   ngOnInit() : void {
-    this.ItemsFile.push(FileFactory.CreateFile( {
-      ID : 1 ,
-      Path : '' ,
-      Created_Date : new Date() ,
-      OwnerID : 1 ,
-      FileName : 'temp' ,
-      User_Booking : {
-        UserID : 2 ,
-        UserName : 'amir'
-      }
-    } , 'Text')) ;
-    this.ItemsFile.push(FileFactory.CreateFile( {
-      ID : 1 ,
-      Path : '' ,
-      Created_Date : new Date() ,
-      OwnerID : 1 ,
-      FileName : 'temp' ,
-      User_Booking : {
-        UserID : 2 ,
-        UserName : 'amir'
-      }
-    } , 'Image')) ;
-    this.ItemsFile.push(FileFactory.CreateFile( {
-      ID : 1 ,
-      Path : '' ,
-      Created_Date : new Date() ,
-      OwnerID : 1 ,
-      FileName : 'temp' ,
-      User_Booking : {
-        UserID : 2 ,
-        UserName : 'amir'
-      }
-    } , 'Video')) ;
-    this.ItemsFile.push(FileFactory.CreateFile( {
-      ID : 1 ,
-      Path : '' ,
-      Created_Date : new Date() ,
-      OwnerID : 1 ,
-      FileName : 'temp' ,
-      User_Booking : {
-        UserID : 2 ,
-        UserName : 'amir'
-      }
-    } , 'Text')) ;
-    this.ItemsFile.push(FileFactory.CreateFile( {
-      ID : 1 ,
-      Path : '' ,
-      Created_Date : new Date() ,
-      OwnerID : 1 ,
-      FileName : 'temp' ,
-      User_Booking : {
-        UserID : 2 ,
-        UserName : 'amir'
-      }
-    } , 'Text')) ;
-    this.ItemsFile.push(FileFactory.CreateFile( {
-      ID : 1 ,
-      Path : '' ,
-      Created_Date : new Date() ,
-      OwnerID : 1 ,
-      FileName : 'temp' ,
-      User_Booking : {
-        UserID : 2 ,
-        UserName : 'amir'
-      }
-    } , 'Text')) ;
-    this.ItemsFile.push(FileFactory.CreateFile( {
-      ID : 1 ,
-      Path : '' ,
-      Created_Date : new Date() ,
-      OwnerID : 1 ,
-      FileName : 'temp' ,
-      User_Booking : {
-        UserID : 2 ,
-        UserName : 'amir'
-      }
-    } , 'Text')) ;
-    this.ItemsFile.push(FileFactory.CreateFile( {
-      ID : 1 ,
-      Path : '' ,
-      Created_Date : new Date() ,
-      OwnerID : 1 ,
-      FileName : 'temp' ,
-      User_Booking : {
-        UserID : 2 ,
-        UserName : 'amir'
-      }
-    } , 'Text')) ;
-    this.ItemsFile.push(FileFactory.CreateFile( {
-      ID : 1 ,
-      Path : '' ,
-      Created_Date : new Date() ,
-      OwnerID : 1 ,
-      FileName : 'temp' ,
-      User_Booking : {
-        UserID : 2 ,
-        UserName : 'amir'
-      }
-    } , 'Text')) ;
-    this.ItemsFile.push(FileFactory.CreateFile( {
-      ID : 1 ,
-      Path : '' ,
-      Created_Date : new Date() ,
-      OwnerID : 1 ,
-      FileName : 'temp' ,
-      User_Booking : {
-        UserID : 2 ,
-        UserName : 'amir'
-      }
-    } , 'Text')) ;
+    this.GetFileData() ;
+  }
+
+  ParserCommandFile(FileInfo: {
+    FileID: number ;
+    FileCommand: CommandsFile }): void {
+    switch (FileInfo.FileCommand) {
+      case CommandsFile.Booking :
+        this.BooingFile(FileInfo.FileID);
+        break ;
+      case CommandsFile.NotBooking :
+        this.NotBooingFile(FileInfo.FileID);
+        break ;
+      case CommandsFile.Delete :
+        this.DeleteFile(FileInfo.FileID);
+        break ;
+      case CommandsFile.Report :
+        this.GetReport(FileInfo.FileID);
+        break ;
+      case CommandsFile.Download :
+        this.GetDownloadFile(FileInfo.FileID);
+        break ;
+    }
+  }
+
+  private GetFileData() {
+    this.FileProcess.ShowFiles(1).subscribe(Value => {
+      this.ItemsFile = Value ;
+    });
+  }
+
+  private DeleteFile(FileID : number) {
+    this.FileProcess.DeleteFile(FileID).subscribe(Value => {
+
+    });
+  }
+
+  private BooingFile(FileID : number) {
+
+  }
+
+  private NotBooingFile(FileID : number) {
+
+  }
+
+  private GetReport(FileID : number) {
+
+  }
+
+  private GetDownloadFile(FileID : number) {
+
+  }
+
+}
+
+
+@Component({
+  templateUrl : './Files.component.html' ,
+  styleUrls : ['./Files.component.css']
+})
+export class PrivateFilesComponent implements OnInit , FileComponent {
+
+  ItemsFile: Files[];
+
+  constructor(private FileProcess : FilesService ,
+              private RoutingProcess : RoutingProcessService) {
+    this.ItemsFile = [] ;
+  }
+
+  ngOnInit() : void {
+
+  }
+
+  ParserCommandFile(FileInfo: {
+    FileID: number ;
+    FileCommand: CommandsFile }): void {
+    switch (FileInfo.FileCommand) {
+      case CommandsFile.Booking :
+        this.BooingFile(FileInfo.FileID);
+        break ;
+      case CommandsFile.NotBooking :
+        this.NotBooingFile(FileInfo.FileID);
+        break ;
+      case CommandsFile.Delete :
+        this.DeleteFile(FileInfo.FileID);
+        break ;
+      case CommandsFile.Report :
+        this.GetReport(FileInfo.FileID);
+        break ;
+      case CommandsFile.Download :
+        this.GetDownloadFile(FileInfo.FileID);
+        break ;
+    }
+  }
+
+  private GetFileData() {
+    const CurrentUrl = this.RoutingProcess.CurrentURl() ;
+    this.FileProcess.ShowFiles(+CurrentUrl[CurrentUrl.length - 1])
+      .subscribe(Value => this.ItemsFile = Value) ;
+  }
+
+  private DeleteFile(FileID : number) {
+    this.FileProcess.DeleteFile(FileID).subscribe(Value => {
+
+    });
+  }
+
+  private BooingFile(FileID : number) {
+
+  }
+
+  private NotBooingFile(FileID : number) {
+
+  }
+
+  private GetReport(FileID : number) {
+
+  }
+
+  private GetDownloadFile(FileID : number) {
+
   }
 
 }

@@ -1,5 +1,5 @@
-import {Component, Input} from "@angular/core";
-import {Files} from "../../../Models/FilesHandle";
+import {Component, EventEmitter, Input, Output} from "@angular/core";
+import {CommandsFile, Files} from "../../../Models/FilesHandle";
 import {DatePipe} from "@angular/common";
 
 @Component({
@@ -11,12 +11,21 @@ export class FileComponent {
 
   ItemFile !: Files ;
 
-  constructor(public DateTransformer: DatePipe) {
+  private readonly CommandOut : EventEmitter<{
+    GroupID : number ,
+    GroupCommand : CommandsFile
+  }> ;
 
+  @Output('GetCommand') get GetCommand() {
+    return this.CommandOut ;
   }
 
   @Input('FileData') set SetFile(FileUpload : Files) {
     this.ItemFile = FileUpload ;
+  }
+
+  constructor(public DateTransformer: DatePipe) {
+    this.CommandOut = new EventEmitter<{GroupID: number , GroupCommand: CommandsFile}>();
   }
 
   GetIconFile() {
@@ -30,5 +39,18 @@ export class FileComponent {
     }
     return '' ;
   }
+
+  SendCommand(FileCommand : CommandsFile) {
+    this.CommandOut.emit({
+      GroupID : this.ItemFile.FileInfo.ID ,
+      GroupCommand : FileCommand
+    }) ;
+  }
+
+  GetAllCommands() {
+    return CommandsFile
+  }
+
+
 
 }

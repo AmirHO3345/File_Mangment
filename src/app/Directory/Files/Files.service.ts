@@ -36,16 +36,19 @@ export class FilesService {
   constructor(private Request : HttpClient ,
               private AuthenticationProcess : AuthenticationService ,
               private AdapterProcess : AdapterService) {
-    this.AccountUser = this.AuthenticationProcess.AccountSnapshot() as Person ;
+    this.AuthenticationProcess.ListenAccount().subscribe(Value => {
+      if(Value != null)
+        this.AccountUser = Value ;
+    });
   }
 
-  public CreateFile(ObjectFile : FormData , NameFile : string , GroupID : number) {
-    return this.Request.post<FilesResponse>(`${Singleton.API}api/filemanagement/file`
-      , {
-      file : ObjectFile ,
-      name : NameFile ,
-      id_group : GroupID
-    } , { headers : new HttpHeaders({'Authorization' : this.AccountUser.getToken()})
+  public CreateFile(ObjectFile : File , NameFile : string , GroupID : number) {
+    const FormFile = new FormData() ;
+    FormFile.append('file' , ObjectFile , ObjectFile.name) ;
+    FormFile.append('name' , NameFile) ;
+    FormFile.append('id_group' , GroupID.toString()) ;
+    return this.Request.post<FilesResponse>(`${Singleton.API}api/filemanagement/file/create` ,
+      FormFile , { headers : new HttpHeaders({'Authorization' : this.AccountUser.getToken()})
     }).pipe(map(Response => {
         if(Response.data.file)
           return this.AdapterProcess.Convert2File(Response.data.file);
@@ -69,7 +72,7 @@ export class FilesService {
   }
 
   public ShowFiles(GroupID : number) {
-    return this.Request.get<FilesResponse>(`${Singleton.API}api/filemanagement/group/files/show` , {
+    return this.Request.get<FilesResponse>(`${Singleton.API}api/filemanagement/file/show` , {
       headers : new HttpHeaders({'Authorization' : this.AccountUser.getToken()})
     }).pipe(map(Response => {
       const FilesValue : Files[] = [] ;

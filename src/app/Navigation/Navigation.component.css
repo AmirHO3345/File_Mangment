@@ -54,7 +54,8 @@
 }
 
 .NavMenu__Buttons ul li.NavMenu__Button-Link a:hover ,
-.NavMenu__Buttons ul li.NavMenu__Button-Link a:active {
+.NavMenu__Buttons ul li.NavMenu__Button-Link a:active ,
+.NavMenu__Buttons ul li.NavMenu__Button-Link a.activeRoute {
   color : var(--primaryColor) ;
   background-color : var(--secandryColor) ;
 }

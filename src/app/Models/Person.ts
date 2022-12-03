@@ -9,7 +9,7 @@ export class Person {
 
   private readonly TypePerson : PersonType ;
 
-  private readonly Token : string ;
+  private Token : string ;
 
   constructor(id : number , name : string , email : string , personType : number , token : string) {
     this.ID = id ;
@@ -24,6 +24,11 @@ export class Person {
 
   public getToken() {
     return `Bearer ${this.Token}` ;
+  }
+
+  public setToken(token : string) {
+    if(this.Token === undefined)
+      this.Token = token ;
   }
 
   public getTypePerson() {
