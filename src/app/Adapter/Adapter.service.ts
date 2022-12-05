@@ -33,8 +33,8 @@ export class AdapterService {
       DataResponse.id ,
       DataResponse.name ,
       {
-        id : 1 , //Temp
-        name : 'amir' //Temp
+        id : DataResponse.user.id ,
+        name : DataResponse.user.name
       } ,
       new Date(DataResponse.created_at)
     ) ;
@@ -42,16 +42,19 @@ export class AdapterService {
 
   public Convert2File(DataResponse : FileResponse) {
     let Booking = undefined ;
-    if(DataResponse.user_bookings)
+    if(!!DataResponse.user_bookings && DataResponse.user_bookings.length != 0)
       Booking = {
-        UserID : DataResponse.user_bookings.id ,
-        UserName : DataResponse.user_bookings.name
+        UserID : DataResponse.user_bookings[0].id ,
+        UserName : DataResponse.user_bookings[0].name
       } ;
     return FileFactory.CreateFile({
       ID : DataResponse.id ,
       Path : DataResponse.path ,
       FileName : DataResponse.name ,
-      OwnerID :  DataResponse.id_user ,
+      Owner : {
+        ID : DataResponse.user.id ,
+        Name : DataResponse.user.name
+      } ,
       Created_Date : new Date(DataResponse.created_at) ,
       User_Booking : Booking
     } , 'Text') ;

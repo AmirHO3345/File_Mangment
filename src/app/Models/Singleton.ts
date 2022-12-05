@@ -17,6 +17,18 @@ export class Singleton {
     GroupNameInput : 'Group_Name'
   } ;
 
-  static readonly RouteName = {} ;
+  static readonly RoutingPage = {
+    Authentication : {
+      SignIn : 'signIn' ,
+      SignUp : 'signUp'
+    } ,
+    Groups : {
+      PublicG : 'publicGroup' ,
+      PrivateG : 'privateGroup' ,
+      IncludedG : 'includedGroup'
+    } ,
+    Files : 'GroupFile' ,
+    ErrorPage : 'SomethingWrong'
+  } ;
 
 }

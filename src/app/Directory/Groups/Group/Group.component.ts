@@ -12,7 +12,7 @@ export class GroupComponent {
   Group_Item !: Group ;
 
   private readonly CommandOut : EventEmitter<{
-    GroupID : number ,
+    GroupItem : Group ,
     GroupCommand : CommandType
   }> ;
 
@@ -26,14 +26,14 @@ export class GroupComponent {
 
   constructor(public DateTransformer: DatePipe) {
     this.CommandOut = new EventEmitter<{
-      GroupID : number ,
+      GroupItem : Group ,
       GroupCommand : CommandType
     }>() ;
   }
 
   SendCommand(GroupCommand : CommandType) {
     this.CommandOut.emit({
-      GroupID : this.Group_Item.ID ,
+      GroupItem : this.Group_Item ,
       GroupCommand : GroupCommand
     });
   }

@@ -3,13 +3,16 @@ interface FileInfo {
 
   readonly ID : number ;
 
-  readonly OwnerID : number ;
-
   readonly FileName : string ;
 
   readonly Path : string ;
 
   readonly Created_Date : Date ;
+
+  readonly Owner : {
+    readonly ID : number ,
+    readonly Name : string
+  } ;
 
   User_Booking ?: {
     UserID : number ,
@@ -23,7 +26,7 @@ export interface FileComponent {
   ItemsFile : Files[] ;
 
   ParserCommandFile(FileInfo : {
-    FileID : number ,
+    FileItem : Files ,
     FileCommand : CommandsFile
   }) : void ;
 

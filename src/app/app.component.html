@@ -1,5 +1,5 @@
-<Navigations *ngIf="this.IsLogin"></Navigations>
-<main [ngClass]="{MainPart : this.IsLogin}" >
+<Navigations *ngIf="this.ViewNavigation"></Navigations>
+<main [ngClass]="{MainPart : this.ViewNavigation}" >
   <router-outlet></router-outlet>
 </main>
 <Loader LoaderType="cover" *ngIf="this.LoadProcess"></Loader>

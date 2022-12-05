@@ -1,5 +1,7 @@
 
 <div class="Files">
   <File_Item *ngFor="let Item of this.ItemsFile"
-             [FileData]="Item"></File_Item>
+             [FileData]="Item"
+             (GetCommand)="this.ParserCommandFile({FileItem : $event.FileItem
+             , FileCommand : $event.GroupCommand})"></File_Item>
 </div>

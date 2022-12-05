@@ -12,7 +12,7 @@ export class FileComponent {
   ItemFile !: Files ;
 
   private readonly CommandOut : EventEmitter<{
-    GroupID : number ,
+    FileItem : Files ,
     GroupCommand : CommandsFile
   }> ;
 
@@ -25,7 +25,7 @@ export class FileComponent {
   }
 
   constructor(public DateTransformer: DatePipe) {
-    this.CommandOut = new EventEmitter<{GroupID: number , GroupCommand: CommandsFile}>();
+    this.CommandOut = new EventEmitter<{FileItem : Files , GroupCommand: CommandsFile}>();
   }
 
   GetIconFile() {
@@ -42,7 +42,7 @@ export class FileComponent {
 
   SendCommand(FileCommand : CommandsFile) {
     this.CommandOut.emit({
-      GroupID : this.ItemFile.FileInfo.ID ,
+      FileItem : this.ItemFile ,
       GroupCommand : FileCommand
     }) ;
   }
@@ -50,7 +50,5 @@ export class FileComponent {
   GetAllCommands() {
     return CommandsFile
   }
-
-
 
 }

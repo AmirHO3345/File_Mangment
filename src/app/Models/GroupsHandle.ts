@@ -4,7 +4,7 @@ export interface GroupComponent {
   Group_Items : Group[] ;
 
   ParserCommandGroup(GroupInfo : {
-    GroupID : number ,
+    GroupItem : Group ,
     GroupCommand : CommandType
   }) : void ;
 
