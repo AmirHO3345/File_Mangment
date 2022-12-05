@@ -1,15 +1,4 @@
 
-export interface GroupComponent {
-
-  Group_Items : Group[] ;
-
-  ParserCommandGroup(GroupInfo : {
-    GroupItem : Group ,
-    GroupCommand : CommandType
-  }) : void ;
-
-}
-
 export class Group {
 
   readonly ID : number ;

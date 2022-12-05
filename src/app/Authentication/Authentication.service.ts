@@ -1,5 +1,5 @@
 import {Injectable} from "@angular/core";
-import {HttpClient, HttpHeaders} from "@angular/common/http";
+import {HttpClient, HttpErrorResponse, HttpHeaders} from "@angular/common/http";
 import {BehaviorSubject, catchError, map} from "rxjs";
 import {Person} from "../Models/Person";
 import {Singleton} from "../Models/Singleton";
@@ -29,8 +29,8 @@ export class AuthenticationService {
       this.Account.next(this.AdapterProcess.Convert2Account(Response));
       if(KeepLogin)
         this.SaveData() ;
-    }) , catchError(ErrorResponse => {
-      throw 'Error' ;
+    }) , catchError((ErrorResponse : HttpErrorResponse) => {
+      throw ErrorResponse.error
     }));
   }
 
@@ -46,11 +46,9 @@ export class AuthenticationService {
       'password' : Message.Password ,
       'role' : Message.Role
     }).pipe(map(Response => {
-      console.log(Response) ;
       this.Account.next(this.AdapterProcess.Convert2Account(Response));
-    }) , catchError(ErrorResponse => {
-      console.log(ErrorResponse) ;
-      throw 'Error' ;
+    }) , catchError((ErrorResponse : HttpErrorResponse) => {
+      throw ErrorResponse.error ;
     }));
   }
 
@@ -95,6 +93,8 @@ export class AuthenticationService {
         const CurrentAccount = this.AdapterProcess.Convert2Account(Response) ;
         CurrentAccount.setToken(Token);
         return CurrentAccount ;
+      }) , catchError((ErrorResponse : HttpErrorResponse) => {
+        throw ErrorResponse.error ;
       }));
   }
 

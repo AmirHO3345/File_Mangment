@@ -21,17 +21,6 @@ interface FileInfo {
 
 }
 
-export interface FileComponent {
-
-  ItemsFile : Files[] ;
-
-  ParserCommandFile(FileInfo : {
-    FileItem : Files ,
-    FileCommand : CommandsFile
-  }) : void ;
-
-}
-
 export abstract class Files {
 
   abstract FileInfo : FileInfo ;
@@ -41,6 +30,7 @@ export abstract class Files {
   private Permission !: {
     CanReport : boolean ,
     CanDelete : boolean ,
+    CanEdit : boolean
     CanNotBooking : boolean ,
   } ;
 
@@ -51,13 +41,15 @@ export abstract class Files {
   public SetPermission(PermissionGrant : {
     Report : boolean ,
     Delete : boolean ,
-    NotBooking : boolean
+    NotBooking : boolean ,
+    Edit : boolean
   }) {
     if(this.Permission === undefined) {
       this.Permission = {
         CanReport : PermissionGrant.Report ,
         CanDelete : PermissionGrant.Delete ,
-        CanNotBooking : PermissionGrant.NotBooking
+        CanNotBooking : PermissionGrant.NotBooking ,
+        CanEdit : PermissionGrant.Edit
       } ;
     }
   }
@@ -136,5 +128,6 @@ export enum CommandsFile {
   Delete ,
   Report ,
   NotBooking,
-  Download
+  Download ,
+  Edit
 }

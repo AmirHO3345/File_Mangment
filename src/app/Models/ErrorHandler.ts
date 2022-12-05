@@ -1,6 +1,19 @@
 import {FormGroup} from "@angular/forms";
 import {Singleton} from "./Singleton";
 
+interface ErrorAPI {
+  errors : {
+    Validation ?: {
+      password ?: string[] ,
+      email ?: string[] ,
+      name ?: string[]
+    } ,
+    Access ?: string ,
+    group ?: string ,
+    file ?: string
+  } ;
+}
+
 // Factory Method Pattern
 
 export abstract class ErrorHandlerManual {
@@ -13,20 +26,37 @@ export abstract class ErrorHandlerManual {
 
   abstract Error_Form(InformationForm : FormGroup) : void ;
 
-  abstract Error_Server(ErrorMessage : string) : void ;
+  abstract Error_Server(ErrorMessage : {}) : void ;
 
   ErrorType() {
     return ErrorsType
   }
+
+  protected ConfigureErrorHandle( TypeWant : ErrorsType , Message : string ,
+                                  RenderWant : boolean) {
+    this.ErrorOccur.Error_Position = TypeWant ;
+    this.ErrorOccur.Error_Message = Message ;
+    this.ErrorOccur.Error_Render = RenderWant ;
+  }
+
 }
 
 export class FactoryErrors {
 
   public static GetErrorObject(Message : {
     Authentication ?:  boolean ,
+    NewCreate ?: boolean ,
+    Groups ?: boolean ,
+    Files ?: boolean
   }) : ErrorHandlerManual {
     if(Message.Authentication)
       return new AuthenticationError() ;
+    if(Message.NewCreate)
+      return new NewCreateError() ;
+    if(Message.Files)
+      return new FilesError() ;
+    if(Message.Groups)
+      return new GroupsError() ;
     return new UnKnownError() ;
   }
 
@@ -40,41 +70,107 @@ export class AuthenticationError extends ErrorHandlerManual {
   Error_Form(InformationForm : FormGroup) {
     if(InformationForm.get(Singleton.FormName.FirstName) &&
       InformationForm.get(Singleton.FormName.FirstName)?.invalid) {
-      this.ErrorOccur.Error_Position = ErrorsType.FirstName ;
-      this.ErrorOccur.Error_Message = 'The First Name Is Invalid' ;
+      this.ConfigureErrorHandle(ErrorsType.FirstName
+        , 'The First Name Is Invalid' , true) ;
     }
     else if(InformationForm.get(Singleton.FormName.LastName) &&
       InformationForm.get(Singleton.FormName.LastName)?.invalid) {
-      this.ErrorOccur.Error_Position = ErrorsType.LastName ;
-      this.ErrorOccur.Error_Message = 'The Last Name Is Invalid' ;
+      this.ConfigureErrorHandle(ErrorsType.LastName
+        , 'The Last Name Is Invalid' , true) ;
     }
     else if(InformationForm.get(Singleton.FormName.Email) &&
       InformationForm.get(Singleton.FormName.Email)?.invalid) {
-      this.ErrorOccur.Error_Position = ErrorsType.Email ;
-      this.ErrorOccur.Error_Message = 'The Email Is Invalid' ;
+      this.ConfigureErrorHandle(ErrorsType.Email
+        , 'The Email Is Invalid' , true) ;
     }
     else if(InformationForm.get(Singleton.FormName.Password) &&
       InformationForm.get(Singleton.FormName.Password)?.invalid) {
-      this.ErrorOccur.Error_Position = ErrorsType.Password ;
-      this.ErrorOccur.Error_Message = 'The Password Is Invalid' ;
-    }
-    else if(InformationForm.get(Singleton.FormName.Role) &&
-      InformationForm.get(Singleton.FormName.Role)?.invalid) {
-      this.ErrorOccur.Error_Position = ErrorsType.Role ;
-      this.ErrorOccur.Error_Message = 'The PersonType Is not Determine' ;
+      this.ConfigureErrorHandle(ErrorsType.Password
+        , 'The Password Is Invalid' , true) ;
     }
     else {
-      this.ErrorOccur.Error_Position = ErrorsType.UnKnown ;
-      this.ErrorOccur.Error_Message = 'This Error Is Undefined' ;
+      this.ConfigureErrorHandle(ErrorsType.UnKnown
+        , 'This Error Is Undefined' , true) ;
     }
-    console.log(this.ErrorOccur);
-    this.ErrorOccur.Error_Render = true ;
   }
 
-  Error_Server(ErrorMessage : string) {
-    this.ErrorOccur.Error_Position = ErrorsType.UnKnown ;
-    this.ErrorOccur.Error_Message = 'This Error Is Undefined' ;
-    this.ErrorOccur.Error_Render = true ;
+  Error_Server(ErrorMessage : {}) {
+    const ActuallyMessage = ErrorMessage as ErrorAPI ;
+    if(ActuallyMessage.errors.Validation) {
+      if(ActuallyMessage.errors.Validation.email) {
+        this.ConfigureErrorHandle(ErrorsType.Email
+          , ActuallyMessage.errors.Validation.email[0] , true) ;
+      } else if(ActuallyMessage.errors.Validation.password) {
+        this.ConfigureErrorHandle(ErrorsType.Password
+          , ActuallyMessage.errors.Validation.password[0] , true) ;
+      } else if(ActuallyMessage.errors.Validation.name) {
+        this.ConfigureErrorHandle(ErrorsType.FullName
+          , ActuallyMessage.errors.Validation.name[0] , true) ;
+      } else {
+        this.ConfigureErrorHandle(ErrorsType.UnKnown
+          , 'This Error Is Undefined' , true) ;
+      }
+    }
+    else {
+      this.ConfigureErrorHandle(ErrorsType.UnKnown
+        , 'This Error Is Undefined' , true) ;
+    }
+  }
+
+}
+
+export class NewCreateError extends ErrorHandlerManual {
+
+  Error_Form(InformationForm: FormGroup): void {
+  }
+
+  Error_Server(ErrorMessage: {}): void {
+  }
+
+}
+
+export class GroupsError extends ErrorHandlerManual {
+
+  Error_Form(InformationForm: FormGroup): void {
+    this.ConfigureErrorHandle(ErrorsType.UnKnown
+      , 'This Error Is Undefined' , true) ;
+  }
+
+  Error_Server(ErrorMessage: {}): void {
+    const ActuallyMessage = ErrorMessage as ErrorAPI ;
+    if(ActuallyMessage.errors.Access) {
+      this.ConfigureErrorHandle(ErrorsType.Permission
+        , ActuallyMessage.errors.Access , true) ;
+    } else if(ActuallyMessage.errors.group) {
+      this.ConfigureErrorHandle(ErrorsType.Group
+        , ActuallyMessage.errors.group , true) ;
+    } else {
+      this.ConfigureErrorHandle(ErrorsType.UnKnown
+        , 'This Error Is Undefined' , true) ;
+    }
+  }
+
+}
+
+export class FilesError extends ErrorHandlerManual {
+
+  Error_Form(InformationForm: FormGroup): void {
+    this.ConfigureErrorHandle(ErrorsType.UnKnown
+      , 'This Error Is Undefined' , true) ;
+  }
+
+  Error_Server(ErrorMessage: {}): void {
+    const ActuallyMessage = ErrorMessage as ErrorAPI ;
+    if(ActuallyMessage.errors.Access) {
+      this.ConfigureErrorHandle(ErrorsType.Permission
+        , ActuallyMessage.errors.Access , true) ;
+    } else if(ActuallyMessage.errors.file) {
+      this.ConfigureErrorHandle(ErrorsType.File
+        , ActuallyMessage.errors.file , true) ;
+    } else {
+      this.ConfigureErrorHandle(ErrorsType.UnKnown
+        , 'This Error Is Undefined' , true) ;
+    }
   }
 
 }
@@ -82,15 +178,13 @@ export class AuthenticationError extends ErrorHandlerManual {
 export class UnKnownError extends ErrorHandlerManual {
 
   Error_Form(InformationForm: FormGroup) {
-    this.ErrorOccur.Error_Position = ErrorsType.UnKnown ;
-    this.ErrorOccur.Error_Message = 'This Error Is Undefined' ;
-    this.ErrorOccur.Error_Render = true ;
+    this.ConfigureErrorHandle(ErrorsType.UnKnown
+      , 'This Error Is Undefined' , true) ;
   }
 
-  Error_Server(ErrorMessage: string) {
-    this.ErrorOccur.Error_Position = ErrorsType.UnKnown;
-    this.ErrorOccur.Error_Message = 'This Error Is Undefined';
-    this.ErrorOccur.Error_Render = true;
+  Error_Server(ErrorMessage: {}) {
+    this.ConfigureErrorHandle(ErrorsType.UnKnown
+      , 'This Error Is Undefined' , true) ;
   }
 
 }
@@ -100,6 +194,9 @@ enum ErrorsType {
   LastName,
   Email ,
   Password ,
-  Role ,
+  FullName ,
+  Permission ,
+  Group ,
+  File ,
   UnKnown
 }

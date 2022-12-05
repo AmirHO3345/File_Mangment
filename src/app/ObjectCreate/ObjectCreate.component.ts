@@ -3,6 +3,7 @@ import {NgForm} from "@angular/forms";
 import {Singleton} from "../Models/Singleton";
 import {GroupsService} from "../Directory/Groups/Groups.service";
 import {FilesService} from "../Directory/Files/Files.service";
+import {LoaderService} from "../Component/Loader/Loader.service";
 
 @Component({
   selector : 'NewObject' ,
@@ -26,13 +27,15 @@ export class ObjectCreateComponent implements OnInit{
   } ;
 
   constructor(private GroupProcess : GroupsService ,
-              private FileProcess : FilesService) {
+              private FileProcess : FilesService ,
+              private LoadingProcess : LoaderService) {
     this.CloseComponent = new EventEmitter<void>() ;
     this.GroupInfo = [] ;
     this.Loading = true ;
   }
 
   ngOnInit(): void {
+    this.LoadingProcess.ActiveTask();
     this.GroupProcess.GetAllGroups().subscribe(Value => {
       Value.forEach(GroupItem => {
         this.GroupInfo.push({
@@ -41,6 +44,7 @@ export class ObjectCreateComponent implements OnInit{
         }) ;
         this.Loading = false ;
       });
+      this.LoadingProcess.DoneTask();
     });
   }
 
@@ -48,6 +52,7 @@ export class ObjectCreateComponent implements OnInit{
     if(InfoForm.form.invalid) {
       return ;
     }
+    this.LoadingProcess.ActiveTask();
     const TargetCreate = InfoForm.form.get(this.GetSingleton().FormName.NewObject)
       ?.value as string ;
     if(TargetCreate == 'New File') {
@@ -56,12 +61,14 @@ export class ObjectCreateComponent implements OnInit{
       const GroupID = this.GetIdGroup(InfoForm.form.get(this.GetSingleton().FormName.GroupInclude)
         ?.value as string) ;
       this.FileProcess.CreateFile(this.FileUploadInfo.FileUpload , FileName , GroupID).subscribe(Value => {
+        this.LoadingProcess.DoneTask();
         this.ClosePopup();
       });
     } else if(TargetCreate == 'New Group') {
       const GroupName = InfoForm.form.get(Singleton.FormName.GroupNameInput)
         ?.value as string ;
       this.GroupProcess.CreateGroup(GroupName).subscribe((Value) => {
+        this.LoadingProcess.DoneTask();
         this.ClosePopup();
       });
     }

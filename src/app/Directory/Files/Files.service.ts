@@ -1,6 +1,6 @@
 import {Injectable} from "@angular/core";
 import {Person} from "../../Models/Person";
-import {HttpClient, HttpHeaders, HttpParams} from "@angular/common/http";
+import {HttpClient, HttpErrorResponse, HttpHeaders, HttpParams} from "@angular/common/http";
 import {AuthenticationService} from "../../Authentication/Authentication.service";
 import {AdapterService} from "../../Adapter/Adapter.service";
 import {Singleton} from "../../Models/Singleton";
@@ -66,7 +66,9 @@ export class FilesService {
           return this.AdapterProcess.Convert2File(Response.data.file);
         }
         return null ;
-      })) ;
+      }) , catchError((ErrorResponse : HttpErrorResponse) => {
+      throw ErrorResponse.error ;
+    })) ;
   }
 
   public DeleteFile(FileID : number) {
@@ -76,9 +78,9 @@ export class FilesService {
         body : {
           id_file : FileID
         }
-      }).pipe(catchError(ErrorValue => {
-        throw '' ;
-      })) ;
+      }).pipe(catchError((ErrorResponse : HttpErrorResponse) => {
+      throw ErrorResponse.error ;
+    })) ;
   }
 
   public GetPrivateGroupFile(GroupItem : Group) {
@@ -91,8 +93,8 @@ export class FilesService {
         Response.data.group.files.forEach(Value =>
           FilesValue.push(this.ConfigureData(Value , GroupItem))) ;
       return FilesValue ;
-    }) , catchError(ErrorValue => {
-      throw '' ;
+    }) , catchError((ErrorResponse : HttpErrorResponse) => {
+      throw ErrorResponse.error ;
     }));
   }
 
@@ -107,15 +109,18 @@ export class FilesService {
           FilesValue.push(this.ConfigureData(Value))
         }) ;
       return FilesValue ;
-    }) , catchError(ErrorValue => {
-      throw '' ;
+    }) , catchError((ErrorResponse : HttpErrorResponse) => {
+      throw ErrorResponse.error ;
     }));
   }
 
   public ReserveFile(FilesID : number[]) {
     return this.Request.post(`${Singleton.API}api/filemanagement/file/booking/check/in` , {
       ids : FilesID
-    } , {headers : new HttpHeaders({'Authorization' : this.AccountUser.getToken()})});
+    } , {headers : new HttpHeaders({'Authorization' : this.AccountUser.getToken()})})
+      .pipe(catchError((ErrorResponse : HttpErrorResponse) => {
+        throw ErrorResponse.error ;
+      }));
   }
 
   public UnReserveFile(FileID : number) {
@@ -124,7 +129,20 @@ export class FilesService {
       body : {
         id_file : FileID
       }
-    });
+    }).pipe(catchError((ErrorResponse : HttpErrorResponse) => {
+      throw ErrorResponse.error ;
+    }));
+  }
+
+  public EditFile(ObjectFile : File , FileID : number) {
+    const FormFile = new FormData() ;
+    FormFile.append('file' , ObjectFile , ObjectFile.name) ;
+    FormFile.append('id_file' , FileID.toString()) ;
+    return this.Request.post(`${Singleton.API}api/filemanagement/file/update` , FormFile , {
+      headers : new HttpHeaders({'Authorization' : this.AccountUser.getToken()})
+    }).pipe(catchError((ErrorResponse : HttpErrorResponse) => {
+      throw ErrorResponse.error
+    }));
   }
 
   public ConfigureData(APIFile : FileResponse , GroupInfo ?: Group) {

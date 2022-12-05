@@ -8,7 +8,8 @@
         </div>
         <div class="Form__Group">
           <input id="Email" type="email" class="Form__Input"
-                 ngModel [name]="this.GetSingleton().FormName.Email" placeholder="Email">
+                 ngModel [name]="this.GetSingleton().FormName.Email" placeholder="Email"
+                 required email>
           <label for="Email" class="Form__Label">Email</label>
           <p class="Form__Error"
              *ngIf="this.ErrorView.ErrorOccur.Error_Render &&

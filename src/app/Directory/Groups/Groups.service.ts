@@ -1,5 +1,5 @@
 import {Injectable} from "@angular/core";
-import {HttpClient, HttpHeaders, HttpParams} from "@angular/common/http";
+import {HttpClient, HttpErrorResponse, HttpHeaders, HttpParams} from "@angular/common/http";
 import {Singleton} from "../../Models/Singleton";
 import {catchError, map} from "rxjs";
 import {AdapterService} from "../../Adapter/Adapter.service";
@@ -61,9 +61,9 @@ export class GroupsService {
           return this.AdapterProcess.Convert2Group(Response.data.group) ;
         }
         return null ;
-      }) , catchError(ErrorResponse => {
-          throw '' ;
-        }));
+      }) , catchError((ErrorResponse : HttpErrorResponse) => {
+      throw ErrorResponse.error ;
+    }));
   }
 
   public DeleteGroup(GroupID : number) {
@@ -72,8 +72,8 @@ export class GroupsService {
       body : {
         id_group : GroupID
       }
-    }).pipe(catchError(ErrorValue => {
-      throw '' ;
+    }).pipe(catchError((ErrorResponse : HttpErrorResponse) => {
+      throw ErrorResponse.error ;
     }));
   }
 
@@ -91,6 +91,8 @@ export class GroupsService {
           GroupsValue.push(this.ConfigureData(Value));
         });
       return GroupsValue ;
+    }) , catchError((ErrorResponse : HttpErrorResponse) => {
+      throw ErrorResponse.error ;
     }));
   }
 
@@ -108,8 +110,8 @@ export class GroupsService {
           GroupsValue.push(this.ConfigureData(Value)) ;
         });
       return GroupsValue ;
-    }) , catchError(ErrorValue => {
-      throw '' ;
+    }) , catchError((ErrorResponse : HttpErrorResponse) => {
+      throw ErrorResponse.error ;
     }));
   }
 
@@ -121,7 +123,9 @@ export class GroupsService {
         if(Response.data.groups)
           Response.data.groups.forEach(Value => GroupArray.push(this.ConfigureData(Value)));
         return GroupArray ;
-      }));
+      }) , catchError((ErrorResponse : HttpErrorResponse) => {
+      throw ErrorResponse.error ;
+    }));
   }
 
   public GetGroupWithFile(GroupID : number) {
@@ -140,6 +144,8 @@ export class GroupsService {
         } ;
       }
       return null ;
+    }) , catchError((ErrorResponse : HttpErrorResponse) => {
+      throw ErrorResponse.error ;
     }));
   }
 

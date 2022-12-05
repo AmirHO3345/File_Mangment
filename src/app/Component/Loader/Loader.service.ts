@@ -14,10 +14,6 @@ export class LoaderService {
     return this.StateWebSite.asObservable() ;
   }
 
-  GetSnapshotState() {
-    return this.StateWebSite.getValue() ;
-  }
-
   ActiveTask() {
     this.StateWebSite.next(TypeState.Busy) ;
   }

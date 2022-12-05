@@ -16,22 +16,22 @@ export class AuthenticationGuard implements CanActivate {
 
   canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<boolean | UrlTree> |
     Promise<boolean | UrlTree> | boolean | UrlTree {
-    this.LoadingProcess.ActiveTask() ;
+    // this.LoadingProcess.ActiveTask('Guard') ;
     if(this.AuthenticationProcess.AccountSnapshot() != null) {
-      this.LoadingProcess.DoneTask() ;
+      // this.LoadingProcess.DoneTask('Guard') ;
       return true ;
     }
     const LoginProcess = this.AuthenticationProcess.AutoLogin() ;
     if(LoginProcess instanceof Observable)
       return LoginProcess.pipe(map(Value => {
-        this.LoadingProcess.DoneTask() ;
+        // this.LoadingProcess.DoneTask('Guard') ;
         if(Value)
           return true ;
         else
           return this.RoutingProcess
             .GetUrlTree(['/' , `${Singleton.RoutingPage.Authentication.SignIn}`]) ;
       })) ;
-    this.LoadingProcess.DoneTask() ;
+    // this.LoadingProcess.DoneTask('Guard') ;
     return this.RoutingProcess
       .GetUrlTree(['/' , `${Singleton.RoutingPage.Authentication.SignIn}`]) ;
   }

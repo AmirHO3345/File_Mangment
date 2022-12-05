@@ -1,31 +1,35 @@
 import {Component, OnInit} from "@angular/core";
-import {CommandsFile, FileComponent, Files} from "../../Models/FilesHandle";
+import {CommandsFile, Files} from "../../Models/FilesHandle";
 import {FilesService} from "./Files.service";
 import {Group} from "../../Models/GroupsHandle";
 import {RoutingProcessService} from "../../Routing/RoutingProcess.service";
 import {GroupsService} from "../Groups/Groups.service";
 import {LoaderService} from "../../Component/Loader/Loader.service";
+import {ProcessPopupService} from "../../Component/ProcessPopup/ProcessPopup.service";
+import {ErrorHandlerManual, FactoryErrors} from "../../Models/ErrorHandler";
 
-@Component({
-  templateUrl : './Files.component.html' ,
-  styleUrls : ['./Files.component.css']
-})
-export class GlobalFilesComponent implements OnInit , FileComponent {
 
-  ItemsFile: Files[];
+export abstract class FileComponent {
 
-  constructor(private FileProcess : FilesService ,
-              private LoadingProcess : LoaderService) {
+  ItemsFile : Files[] ;
+
+  Error_Handler : ErrorHandlerManual ;
+
+  constructor(protected FileProcess : FilesService ,
+              protected RoutingProcess : RoutingProcessService ,
+              protected LoadingProcess : LoaderService ,
+              protected PopupProcess : ProcessPopupService) {
     this.ItemsFile = [] ;
+    this.Error_Handler = FactoryErrors.GetErrorObject({
+      Files : true
+    }) ;
   }
 
-  ngOnInit() : void {
-    this.GetFileData() ;
-  }
-
-  ParserCommandFile(FileInfo: {
-    FileItem: Files ;
-    FileCommand: CommandsFile }): void {
+  public ParserCommandFile(FileInfo : {
+    FileItem : Files ,
+    FileCommand : CommandsFile ,
+    FileUpload ?: File
+  })  {
     switch (FileInfo.FileCommand) {
       case CommandsFile.Booking :
         this.BookingFile(FileInfo.FileItem.FileInfo.ID);
@@ -42,42 +46,63 @@ export class GlobalFilesComponent implements OnInit , FileComponent {
       case CommandsFile.Download :
         this.GetDownloadFile(FileInfo.FileItem.FileInfo.ID);
         break ;
+      case CommandsFile.Edit :
+        if(FileInfo.FileUpload)
+          this.EditFile(FileInfo.FileItem.FileInfo.ID , FileInfo.FileUpload) ;
+        break ;
     }
   }
 
-  private GetFileData() {
+  protected abstract InitialData() : void ;
+
+  protected abstract UpdateFileData() : void ;
+
+  protected DeleteFile(FileID : number) {
     this.LoadingProcess.ActiveTask() ;
-    this.FileProcess.GetGlobalGroupFile().subscribe(Value => {
-      this.ItemsFile = Value ;
+    this.FileProcess.DeleteFile(FileID).subscribe(Value => {
+      this.UpdateFileData();
+    } , ErrorValue => {
+      this.Error_Handler.Error_Server(ErrorValue) ;
+      this.PopupProcess.ViewPopup("Error", this.Error_Handler.ErrorOccur.Error_Message) ;
       this.LoadingProcess.DoneTask() ;
     });
   }
 
-  private DeleteFile(FileID : number) {
-    this.LoadingProcess.ActiveTask() ;
-    this.FileProcess.DeleteFile(FileID).subscribe(Value => {
-      this.GetFileData();
-    });
-  }
-
-  private BookingFile(FileID : number) {
+  protected BookingFile(FileID : number) {
+    this.LoadingProcess.ActiveTask();
     this.FileProcess.ReserveFile([FileID]).subscribe(() => {
-      this.GetFileData();
+      this.UpdateFileData();
+    } , ErrorValue => {
+      this.Error_Handler.Error_Server(ErrorValue) ;
+      this.PopupProcess.ViewPopup("Error", this.Error_Handler.ErrorOccur.Error_Message ) ;
+      this.LoadingProcess.DoneTask() ;
     });
   }
 
-  private NotBookingFile(FileID : number) {
+  protected NotBookingFile(FileID : number) {
+    this.LoadingProcess.ActiveTask();
     this.FileProcess.UnReserveFile(FileID).subscribe(() => {
-      this.GetFileData();
-    })
+      this.UpdateFileData();
+    } , ErrorValue => {
+      this.Error_Handler.Error_Server(ErrorValue) ;
+      this.PopupProcess.ViewPopup("Error", this.Error_Handler.ErrorOccur.Error_Message ) ;
+      this.LoadingProcess.DoneTask() ;
+    });
   }
 
-  private GetReport(FileID : number) {
+  protected EditFile(FileID : number , UploadFile : File) {
+    this.LoadingProcess.ActiveTask();
+    this.FileProcess.EditFile(UploadFile , FileID).subscribe(() => {
+      this.UpdateFileData() ;
+    });
+  }
+
+  protected GetReport(FileID : number) {
 
   }
 
-  private GetDownloadFile(FileID : number) {
-
+  protected GetDownloadFile(FileID : number) {
+    /* GetFileData */
   }
 
 }
@@ -87,16 +112,53 @@ export class GlobalFilesComponent implements OnInit , FileComponent {
   templateUrl : './Files.component.html' ,
   styleUrls : ['./Files.component.css']
 })
-export class PrivateFilesComponent implements OnInit , FileComponent {
+export class GlobalFilesComponent extends FileComponent implements OnInit {
+
+  constructor(protected override FileProcess : FilesService ,
+              protected override RoutingProcess : RoutingProcessService ,
+              protected override LoadingProcess : LoaderService ,
+              protected override PopupProcess : ProcessPopupService) {
+    super(FileProcess , RoutingProcess , LoadingProcess , PopupProcess) ;
+    this.ItemsFile = [] ;
+  }
+
+  ngOnInit() : void {
+    this.InitialData() ;
+  }
+
+  protected InitialData(): void {
+    this.LoadingProcess.ActiveTask() ;
+    this.FileProcess.GetGlobalGroupFile().subscribe(Value => {
+      this.ItemsFile = Value ;
+      this.LoadingProcess.DoneTask() ;
+    } , ErrorValue => {
+      this.Error_Handler.Error_Server(ErrorValue) ;
+      this.PopupProcess.ViewPopup("Error", this.Error_Handler.ErrorOccur.Error_Message ) ;
+      this.LoadingProcess.DoneTask() ;
+    });
+  }
+
+  protected UpdateFileData(): void {
+    this.InitialData() ;
+  }
+
+}
+
+
+@Component({
+  templateUrl : './Files.component.html' ,
+  styleUrls : ['./Files.component.css']
+})
+export class PrivateFilesComponent extends FileComponent implements OnInit {
 
   MainGroup !: Group ;
 
-  ItemsFile: Files[];
-
-  constructor(private FileProcess : FilesService ,
-              private GroupProcess : GroupsService ,
-              private RoutingProcess : RoutingProcessService ,
-              private LoadingProcess : LoaderService) {
+  constructor(protected override FileProcess : FilesService ,
+              protected GroupProcess : GroupsService ,
+              protected override RoutingProcess : RoutingProcessService ,
+              protected override LoadingProcess : LoaderService ,
+              protected override PopupProcess : ProcessPopupService) {
+    super(FileProcess  , RoutingProcess , LoadingProcess , PopupProcess) ;
     this.ItemsFile = [] ;
   }
 
@@ -104,29 +166,7 @@ export class PrivateFilesComponent implements OnInit , FileComponent {
     this.InitialData();
   }
 
-  ParserCommandFile(FileInfo: {
-    FileItem: Files ;
-    FileCommand: CommandsFile }): void {
-    switch (FileInfo.FileCommand) {
-      case CommandsFile.Booking :
-        this.BookingFile(FileInfo.FileItem.FileInfo.ID);
-        break ;
-      case CommandsFile.NotBooking :
-        this.NotBookingFile(FileInfo.FileItem.FileInfo.ID);
-        break ;
-      case CommandsFile.Delete :
-        this.DeleteFile(FileInfo.FileItem.FileInfo.ID);
-        break ;
-      case CommandsFile.Report :
-        this.GetReport(FileInfo.FileItem.FileInfo.ID);
-        break ;
-      case CommandsFile.Download :
-        this.GetDownloadFile(FileInfo.FileItem.FileInfo.ID);
-        break ;
-    }
-  }
-
-  private InitialData() {
+  protected InitialData() {
     this.LoadingProcess.ActiveTask() ;
     const CurrentUrl = this.RoutingProcess.CurrentURl() ;
     this.GroupProcess.GetGroupWithFile(+CurrentUrl[CurrentUrl.length - 1])
@@ -136,43 +176,24 @@ export class PrivateFilesComponent implements OnInit , FileComponent {
           this.ItemsFile = Value.GroupFiles
         }
         this.LoadingProcess.DoneTask() ;
+      } , ErrorValue => {
+        this.Error_Handler.Error_Server(ErrorValue) ;
+        this.PopupProcess.ViewPopup("Error", this.Error_Handler.ErrorOccur.Error_Message ) ;
+        this.LoadingProcess.DoneTask() ;
       });
   }
 
-  private UpdateFileData() {
+  protected UpdateFileData() {
     this.LoadingProcess.ActiveTask() ;
     this.FileProcess.GetPrivateGroupFile(this.MainGroup)
       .subscribe(Value => {
         this.ItemsFile = Value ;
         this.LoadingProcess.DoneTask() ;
+      } , ErrorValue => {
+        this.Error_Handler.Error_Server(ErrorValue) ;
+        this.PopupProcess.ViewPopup("Error", this.Error_Handler.ErrorOccur.Error_Message ) ;
+        this.LoadingProcess.DoneTask() ;
       }) ;
-  }
-
-  private DeleteFile(FileID : number) {
-    this.LoadingProcess.ActiveTask() ;
-    this.FileProcess.DeleteFile(FileID).subscribe(Value => {
-      this.UpdateFileData();
-    });
-  }
-
-  private BookingFile(FileID : number) {
-    this.FileProcess.ReserveFile([FileID]).subscribe(() => {
-      this.UpdateFileData();
-    });
-  }
-
-  private NotBookingFile(FileID : number) {
-    this.FileProcess.UnReserveFile(FileID).subscribe(() => {
-      this.UpdateFileData();
-    });
-  }
-
-  private GetReport(FileID : number) {
-
-  }
-
-  private GetDownloadFile(FileID : number) {
-    /* GetFileData */
   }
 
 }

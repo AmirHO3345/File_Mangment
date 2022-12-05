@@ -35,4 +35,8 @@ export class RoutingProcessService {
     return this.RouterPage.createUrlTree(Commands) ;
   }
 
+  public Route2Error404() {
+    this.RouterPage.navigate(['/' , `${Singleton.RoutingPage.ErrorPage}`]) ;
+  }
+
 }

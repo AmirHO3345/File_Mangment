@@ -30,7 +30,7 @@
         </div>
         <div class="Form__Group">
           <input id="Email" type="email" class="Form__Input"
-                 ngModel [name]="this.GetSingleton().FormName.Email" placeholder="Email" email>
+                 ngModel [name]="this.GetSingleton().FormName.Email" placeholder="Email" required email>
           <label for="Email" class="Form__Label">Email</label>
           <p class="Form__Error"
              *ngIf="this.ErrorView.ErrorOccur.Error_Render &&
@@ -54,7 +54,7 @@
           <div class="Form__Group-Radio">
             <div class="Form__Radio">
               <input id="Admin" type="radio" class="Form__Radio-Input"
-                     ngModel value="Admin" [name]="this.GetSingleton().FormName.Role" required>
+                     ngModel value="Admin" [name]="this.GetSingleton().FormName.Role">
               <label for="Admin" class="Form__Radio-Label">
                 <span class="Form__Radio-Button">&nbsp;</span>
                 Admin
@@ -62,19 +62,13 @@
             </div>
             <div class="Form__Radio">
               <input id="User" type="radio" class="Form__Radio-Input"
-                     ngModel value="User" [name]="this.GetSingleton().FormName.Role" required>
+                     ngModel value="User" [name]="this.GetSingleton().FormName.Role">
               <label for="User" class="Form__Radio-Label">
                 <span class="Form__Radio-Button">&nbsp;</span>
                 User
               </label>
             </div>
           </div>
-          <p class="Form__Error"
-             *ngIf="this.ErrorView.ErrorOccur.Error_Render &&
-             this.ErrorView.ErrorOccur.Error_Position == this.ErrorView.ErrorType().Role"
-          >
-            {{this.ErrorView.ErrorOccur.Error_Message}}
-          </p>
         </div>
         <div class="Form__Group u-text-align-Center">
           <button class="Button Button--Large Button--Cyan Form__Submit">Register</button>

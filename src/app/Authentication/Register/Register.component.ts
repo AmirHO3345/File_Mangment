@@ -4,6 +4,7 @@ import {AuthenticationService} from "../Authentication.service";
 import {ErrorHandlerManual, FactoryErrors} from "../../Models/ErrorHandler";
 import {Singleton} from "../../Models/Singleton";
 import {RoutingProcessService} from "../../Routing/RoutingProcess.service";
+import {LoaderService} from "../../Component/Loader/Loader.service";
 
 @Component({
   templateUrl : `./Register.html` ,
@@ -14,7 +15,8 @@ export class RegisterComponent {
   ErrorView : ErrorHandlerManual ;
 
   constructor(public AuthenticationProcess : AuthenticationService ,
-              public ProcessRouting : RoutingProcessService) {
+              public ProcessRouting : RoutingProcessService ,
+              private LoadingProcess : LoaderService) {
     this.ErrorView = FactoryErrors.GetErrorObject({
       Authentication : true
     }) ;
@@ -25,9 +27,11 @@ export class RegisterComponent {
   }
 
   public OnSubmit(InfoForm : NgForm) {
+    this.LoadingProcess.ActiveTask() ;
     this.ErrorView.ErrorOccur.Error_Render = false ;
     if(InfoForm.form.invalid) {
-      this.ErrorView.Error_Form(InfoForm.form)
+      this.ErrorView.Error_Form(InfoForm.form) ;
+      this.LoadingProcess.DoneTask() ;
       return ;
     }
     const Name : string = `${(InfoForm.form.get(Singleton.FormName.FirstName) as  AbstractControl).value} ${(InfoForm.
@@ -40,9 +44,12 @@ export class RegisterComponent {
       Password : (InfoForm.form.get(Singleton.FormName.Password) as  AbstractControl).value ,
       Role : Role
     }).subscribe(Value => {
+      this.LoadingProcess.DoneTask() ;
       this.ProcessRouting.Route2MainPage();
     } , ErrorValue => {
       this.ErrorView.Error_Server(ErrorValue) ;
+      this.LoadingProcess.DoneTask() ;
     });
   }
+
 }

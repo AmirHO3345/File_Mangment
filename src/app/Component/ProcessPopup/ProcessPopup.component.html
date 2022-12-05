@@ -1,0 +1,19 @@
+<section class="PopUp Show u-top-render ErrorPop__Popup"
+         *ngIf="this.ProcessType">
+  <div class="PopUp__Content PopUp__Content--Small u-text-align-Center">
+    <div class="ErrorPop__Content">
+      <div class="ErrorPop__Icon">
+        <i class='bx bxs-error-alt'></i>
+      </div>
+      <div class="ErrorPop__Text">
+        <h2>{{(this.ProcessType === this.GetTypeProcess().SuccessResult)?
+          'Well Done' : 'Whoops'}}</h2>
+        <p>{{this.Message}}</p>
+      </div>
+      <div class="ErrorPop__Button">
+        <button class="Button Button--Medium Button--Danger"
+                (click)="this.ClosePopup()">Try Again</button>
+      </div>
+    </div>
+  </div>
+</section>
