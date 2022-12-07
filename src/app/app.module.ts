@@ -18,8 +18,9 @@ import {FileComponent} from "./Directory/Files/File/File.component";
 import {DatePipe} from "@angular/common";
 import {ErrorPageComponent} from "./Error/ErrorPage.component";
 import {GroupsIncludedComponent, GroupsPrivateComponent} from "./Directory/Groups/Groups.component";
-import {GlobalFilesComponent, PrivateFilesComponent} from "./Directory/Files/Files.component";
+import {GlobalFilesComponent, MyFilesComponent, PrivateFilesComponent} from "./Directory/Files/Files.component";
 import {ProcessPopupComponent} from "./Component/ProcessPopup/ProcessPopup.component";
+import {UsersComponent} from "./Directory/Users/Users.component";
 
 @NgModule({
   declarations: [
@@ -39,7 +40,9 @@ import {ProcessPopupComponent} from "./Component/ProcessPopup/ProcessPopup.compo
     GlobalFilesComponent ,
     PrivateFilesComponent ,
     ErrorPageComponent ,
-    ProcessPopupComponent
+    ProcessPopupComponent ,
+    UsersComponent ,
+    MyFilesComponent
   ],
   imports: [
     BrowserModule,

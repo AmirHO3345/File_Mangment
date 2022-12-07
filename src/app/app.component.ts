@@ -1,6 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {AuthenticationService} from "./Authentication/Authentication.service";
 import {TypeState} from "./Component/Loader/Loader.service";
+import {ProcessPopupService} from "./Component/ProcessPopup/ProcessPopup.service";
 
 @Component({
   selector: 'app-root',

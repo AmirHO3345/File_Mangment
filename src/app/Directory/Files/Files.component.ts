@@ -3,7 +3,6 @@ import {CommandsFile, Files} from "../../Models/FilesHandle";
 import {FilesService} from "./Files.service";
 import {Group} from "../../Models/GroupsHandle";
 import {RoutingProcessService} from "../../Routing/RoutingProcess.service";
-import {GroupsService} from "../Groups/Groups.service";
 import {LoaderService} from "../../Component/Loader/Loader.service";
 import {ProcessPopupService} from "../../Component/ProcessPopup/ProcessPopup.service";
 import {ErrorHandlerManual, FactoryErrors} from "../../Models/ErrorHandler";
@@ -98,7 +97,7 @@ export abstract class FileComponent {
   }
 
   protected GetReport(FileID : number) {
-
+    this.RoutingProcess.Route2Report(FileID) ;
   }
 
   protected GetDownloadFile(FileID : number) {
@@ -129,7 +128,7 @@ export class GlobalFilesComponent extends FileComponent implements OnInit {
   protected InitialData(): void {
     this.LoadingProcess.ActiveTask() ;
     this.FileProcess.GetGlobalGroupFile().subscribe(Value => {
-      this.ItemsFile = Value ;
+      this.ItemsFile = Value as Files[] ;
       this.LoadingProcess.DoneTask() ;
     } , ErrorValue => {
       this.Error_Handler.Error_Server(ErrorValue) ;
@@ -154,7 +153,6 @@ export class PrivateFilesComponent extends FileComponent implements OnInit {
   MainGroup !: Group ;
 
   constructor(protected override FileProcess : FilesService ,
-              protected GroupProcess : GroupsService ,
               protected override RoutingProcess : RoutingProcessService ,
               protected override LoadingProcess : LoaderService ,
               protected override PopupProcess : ProcessPopupService) {
@@ -169,7 +167,7 @@ export class PrivateFilesComponent extends FileComponent implements OnInit {
   protected InitialData() {
     this.LoadingProcess.ActiveTask() ;
     const CurrentUrl = this.RoutingProcess.CurrentURl() ;
-    this.GroupProcess.GetGroupWithFile(+CurrentUrl[CurrentUrl.length - 1])
+    this.FileProcess.GetPrivateGroupFile(+CurrentUrl[CurrentUrl.length - 1])
       .subscribe(Value => {
         if(Value) {
           this.MainGroup = Value.GroupObject ;
@@ -184,16 +182,41 @@ export class PrivateFilesComponent extends FileComponent implements OnInit {
   }
 
   protected UpdateFileData() {
+    this.InitialData();
+  }
+
+}
+
+@Component({
+  templateUrl : './Files.component.html' ,
+  styleUrls : ['./Files.component.css']
+})
+export class MyFilesComponent extends FileComponent implements OnInit {
+
+  constructor(protected override FileProcess : FilesService ,
+              protected override RoutingProcess : RoutingProcessService ,
+              protected override LoadingProcess : LoaderService ,
+              protected override PopupProcess : ProcessPopupService) {
+    super(FileProcess  , RoutingProcess , LoadingProcess , PopupProcess) ;
+    this.ItemsFile = [] ;
+  }
+
+  ngOnInit() : void {
+    this.InitialData();
+  }
+
+  protected InitialData() {
     this.LoadingProcess.ActiveTask() ;
-    this.FileProcess.GetPrivateGroupFile(this.MainGroup)
-      .subscribe(Value => {
-        this.ItemsFile = Value ;
-        this.LoadingProcess.DoneTask() ;
-      } , ErrorValue => {
-        this.Error_Handler.Error_Server(ErrorValue) ;
-        this.PopupProcess.ViewPopup("Error", this.Error_Handler.ErrorOccur.Error_Message ) ;
-        this.LoadingProcess.DoneTask() ;
-      }) ;
+    this.FileProcess.GetAllMyFile().subscribe(Value => {
+      this.ItemsFile = Value ;
+      this.LoadingProcess.DoneTask() ;
+    } , () => {
+      this.LoadingProcess.DoneTask() ;
+    }) ;
+  }
+
+  protected UpdateFileData() {
+    this.InitialData();
   }
 
 }

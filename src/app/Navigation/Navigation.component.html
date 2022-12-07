@@ -8,29 +8,36 @@
   <nav class="NavMenu__Buttons">
     <ul>
       <li class="NavMenu__Button-Link">
-        <a [routerLink]="[ '/' , 'publicGroup']"
+        <a [routerLink]="[ '/' , this.GetSingleton().RoutingPage.Groups.PublicG]"
            routerLinkActive="activeRoute" >
           <i class='bx bx-planet' ></i>
           <span class="NavMenu__ButtonName">Public Group</span>
         </a>
       </li>
       <li class="NavMenu__Button-Link">
-        <a [routerLink]="[ '/' , 'privateGroup']"
+        <a [routerLink]="[ '/' , this.GetSingleton().RoutingPage.Groups.PrivateG]"
            routerLinkActive="activeRoute" >
           <i class='bx bx-shape-triangle'></i>
           <span class="NavMenu__ButtonName">Private Groups</span>
         </a>
       </li>
       <li class="NavMenu__Button-Link">
-        <a [routerLink]="[ '/' , 'includedGroup']"
+        <a [routerLink]="[ '/' , this.GetSingleton().RoutingPage.Groups.IncludedG]"
            routerLinkActive="activeRoute" >
           <i class='bx bx-shape-triangle'></i>
           <span class="NavMenu__ButtonName">Included Groups</span>
         </a>
       </li>
+      <li class="NavMenu__Button-Link">
+        <a [routerLink]="[ '/' , this.GetSingleton().RoutingPage.Groups.MyFiles]"
+           routerLinkActive="activeRoute" >
+          <i class='bx bxs-food-menu' ></i>
+          <span class="NavMenu__ButtonName">My Files</span>
+        </a>
+      </li>
       <li class="NavMenu__Button-Action"
           (click)="OpenPopup()">
-        <a [routerLink]="['./']" >
+        <a [routerLink]="this.ProcessRouting.CurrentURl()" >
           <i class='bx bxs-plus-circle'></i>
           <span class="NavMenu__ButtonName">New</span>
         </a>

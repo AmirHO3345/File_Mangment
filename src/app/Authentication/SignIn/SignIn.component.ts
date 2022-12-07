@@ -26,7 +26,7 @@ export class SignInComponent {
     this.LoadingProcess.ActiveTask() ;
     this.ErrorView.ErrorOccur.Error_Render = false ;
     if(InfoForm.form.invalid) {
-      this.ErrorView.Error_Form(InfoForm.form) ;
+      this.ErrorView.Error_Front(InfoForm.form) ;
       this.LoadingProcess.DoneTask() ;
       return ;
     }

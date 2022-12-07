@@ -19,6 +19,10 @@ export class RoutingProcessService {
     this.RouterPage.navigate(['/' , `${Singleton.RoutingPage.Files}` , `${GroupID}`]);
   }
 
+  public Route2Report(FileID : number) {
+    this.RouterPage.navigate(['/' , `${Singleton.RoutingPage.Report}` , `${FileID}`]) ;
+  }
+
   public Route2MainPage() {
     this.RouterPage.navigate(['/' , `${Singleton.RoutingPage.Groups.PublicG}`]);
   }

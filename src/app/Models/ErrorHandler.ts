@@ -6,7 +6,8 @@ interface ErrorAPI {
     Validation ?: {
       password ?: string[] ,
       email ?: string[] ,
-      name ?: string[]
+      name ?: string[] ,
+      id_file ?: string[]
     } ,
     Access ?: string ,
     group ?: string ,
@@ -24,9 +25,15 @@ export abstract class ErrorHandlerManual {
     Error_Message : '' ,
   } ;
 
-  abstract Error_Form(InformationForm : FormGroup) : void ;
+  Error_Front(InformationError : {}) : void {
+    this.ConfigureErrorHandle(ErrorsType.UnKnown
+      , 'This Error Is Undefined' , true) ;
+  }
 
-  abstract Error_Server(ErrorMessage : {}) : void ;
+  Error_Server(ErrorMessage : {}) : void {
+    this.ConfigureErrorHandle(ErrorsType.UnKnown
+      , 'This Error Is Undefined' , true) ;
+  }
 
   ErrorType() {
     return ErrorsType
@@ -47,7 +54,8 @@ export class FactoryErrors {
     Authentication ?:  boolean ,
     NewCreate ?: boolean ,
     Groups ?: boolean ,
-    Files ?: boolean
+    Files ?: boolean ,
+    Report ?: boolean
   }) : ErrorHandlerManual {
     if(Message.Authentication)
       return new AuthenticationError() ;
@@ -57,6 +65,8 @@ export class FactoryErrors {
       return new FilesError() ;
     if(Message.Groups)
       return new GroupsError() ;
+    if(Message.Report)
+      return new ReportError() ;
     return new UnKnownError() ;
   }
 
@@ -67,7 +77,8 @@ export class FactoryErrors {
 
 export class AuthenticationError extends ErrorHandlerManual {
 
-  Error_Form(InformationForm : FormGroup) {
+  override Error_Front(InformationError : {}) {
+    const InformationForm = InformationError as FormGroup ;
     if(InformationForm.get(Singleton.FormName.FirstName) &&
       InformationForm.get(Singleton.FormName.FirstName)?.invalid) {
       this.ConfigureErrorHandle(ErrorsType.FirstName
@@ -94,7 +105,7 @@ export class AuthenticationError extends ErrorHandlerManual {
     }
   }
 
-  Error_Server(ErrorMessage : {}) {
+  override Error_Server(ErrorMessage : {}) {
     const ActuallyMessage = ErrorMessage as ErrorAPI ;
     if(ActuallyMessage.errors.Validation) {
       if(ActuallyMessage.errors.Validation.email) {
@@ -121,22 +132,14 @@ export class AuthenticationError extends ErrorHandlerManual {
 
 export class NewCreateError extends ErrorHandlerManual {
 
-  Error_Form(InformationForm: FormGroup): void {
-  }
-
-  Error_Server(ErrorMessage: {}): void {
+  override Error_Server(ErrorMessage: {}): void {
   }
 
 }
 
 export class GroupsError extends ErrorHandlerManual {
 
-  Error_Form(InformationForm: FormGroup): void {
-    this.ConfigureErrorHandle(ErrorsType.UnKnown
-      , 'This Error Is Undefined' , true) ;
-  }
-
-  Error_Server(ErrorMessage: {}): void {
+  override Error_Server(ErrorMessage: {}): void {
     const ActuallyMessage = ErrorMessage as ErrorAPI ;
     if(ActuallyMessage.errors.Access) {
       this.ConfigureErrorHandle(ErrorsType.Permission
@@ -154,12 +157,7 @@ export class GroupsError extends ErrorHandlerManual {
 
 export class FilesError extends ErrorHandlerManual {
 
-  Error_Form(InformationForm: FormGroup): void {
-    this.ConfigureErrorHandle(ErrorsType.UnKnown
-      , 'This Error Is Undefined' , true) ;
-  }
-
-  Error_Server(ErrorMessage: {}): void {
+  override Error_Server(ErrorMessage: {}): void {
     const ActuallyMessage = ErrorMessage as ErrorAPI ;
     if(ActuallyMessage.errors.Access) {
       this.ConfigureErrorHandle(ErrorsType.Permission
@@ -175,14 +173,29 @@ export class FilesError extends ErrorHandlerManual {
 
 }
 
-export class UnKnownError extends ErrorHandlerManual {
+export class ReportError extends ErrorHandlerManual {
 
-  Error_Form(InformationForm: FormGroup) {
-    this.ConfigureErrorHandle(ErrorsType.UnKnown
-      , 'This Error Is Undefined' , true) ;
+  override Error_Server(ErrorMessage: {}): void {
+    const ActuallyMessage = ErrorMessage as ErrorAPI ;
+    if(ActuallyMessage.errors.Validation) {
+      if(ActuallyMessage.errors.Validation.id_file) {
+        this.ConfigureErrorHandle(ErrorsType.ReportRoute ,
+          ActuallyMessage.errors.Validation.id_file[0] , true) ;
+      } else {
+        this.ConfigureErrorHandle(ErrorsType.UnKnown
+          , 'This Error Is Undefined' , true) ;
+      }
+    } else {
+      this.ConfigureErrorHandle(ErrorsType.UnKnown
+        , 'This Error Is Undefined' , true) ;
+    }
   }
 
-  Error_Server(ErrorMessage: {}) {
+}
+
+export class UnKnownError extends ErrorHandlerManual {
+
+  override Error_Server(ErrorMessage: {}) {
     this.ConfigureErrorHandle(ErrorsType.UnKnown
       , 'This Error Is Undefined' , true) ;
   }
@@ -198,5 +211,6 @@ enum ErrorsType {
   Permission ,
   Group ,
   File ,
+  ReportRoute ,
   UnKnown
 }

@@ -4,10 +4,11 @@ import {HttpClient, HttpErrorResponse, HttpHeaders, HttpParams} from "@angular/c
 import {AuthenticationService} from "../../Authentication/Authentication.service";
 import {AdapterService} from "../../Adapter/Adapter.service";
 import {Singleton} from "../../Models/Singleton";
-import {catchError, map} from "rxjs";
-import {Files} from "../../Models/FilesHandle";
+import {catchError, map, take} from "rxjs";
+import {GroupsService} from "../Groups/Groups.service";
 import {Group} from "../../Models/GroupsHandle";
 import {PermissionService} from "../../Permission/Permission.service";
+import {Files} from "../../Models/FilesHandle";
 
 
 export interface FileResponse {
@@ -24,14 +25,20 @@ export interface FileResponse {
     id : number ,
     name : string
   }[] ;
+  report : ReportResponse[] ;
+}
+
+export interface ReportResponse {
+  id_user_booking : number ;
+  name_user_booking : string ;
+  booking_date: string ;
+  unbooking_date: string ;
 }
 
 interface FilesResponse {
   data : {
-    file ?: FileResponse ,
-    group ?: {
-      files : FileResponse[]
-    }
+    file : FileResponse ,
+    files : FileResponse[]
   }
 }
 
@@ -43,7 +50,8 @@ export class FilesService {
   constructor(private Request : HttpClient ,
               private AuthenticationProcess : AuthenticationService ,
               private AdapterProcess : AdapterService ,
-              private PermissionService : PermissionService) {
+              private GroupProcess : GroupsService ,
+              private PermissionProcess : PermissionService) {
     this.AuthenticationProcess.ListenAccount().subscribe(Value => {
       if(Value != null)
         this.AccountUser = Value ;
@@ -55,18 +63,9 @@ export class FilesService {
     FormFile.append('file' , ObjectFile , ObjectFile.name) ;
     FormFile.append('name' , NameFile) ;
     FormFile.append('id_group' , GroupID.toString()) ;
-    return this.Request.post<FilesResponse>(`${Singleton.API}api/filemanagement/file/create` ,
+    return this.Request.post(`${Singleton.API}api/filemanagement/file/create` ,
       FormFile , { headers : new HttpHeaders({'Authorization' : this.AccountUser.getToken()})
-    }).pipe(map(Response => {
-        if(Response.data.file) {
-          Response.data.file.user = {
-            id : this.AccountUser.ID ,
-            name : this.AccountUser.Name
-          } ;
-          return this.AdapterProcess.Convert2File(Response.data.file);
-        }
-        return null ;
-      }) , catchError((ErrorResponse : HttpErrorResponse) => {
+    }).pipe(catchError((ErrorResponse : HttpErrorResponse) => {
       throw ErrorResponse.error ;
     })) ;
   }
@@ -83,34 +82,29 @@ export class FilesService {
     })) ;
   }
 
-  public GetPrivateGroupFile(GroupItem : Group) {
-    return this.Request.get<FilesResponse>(`${Singleton.API}api/filemanagement/group/files/show` , {
-      headers : new HttpHeaders({'Authorization' : this.AccountUser.getToken()}) ,
-      params : new HttpParams().set('id_group' , GroupItem.ID)
-    }).pipe(map(Response => {
-      const FilesValue : Files[] = [] ;
-      if(Response.data.group)
-        Response.data.group.files.forEach(Value =>
-          FilesValue.push(this.ConfigureData(Value , GroupItem))) ;
-      return FilesValue ;
-    }) , catchError((ErrorResponse : HttpErrorResponse) => {
-      throw ErrorResponse.error ;
-    }));
+  public GetPrivateGroupFile(GroupItem : number) {
+    return this.GroupProcess.GetGroupWithFile(GroupItem).pipe(map(ServiceValue => {
+        const FilesArray : Files[] = [] ;
+        if(ServiceValue.GroupFiles) {
+          ServiceValue.GroupFiles.forEach(Value => FilesArray.push(this.ConfigureData({
+            APIFile : Value ,
+            GroupFile : ServiceValue.GroupObject
+          }))) ;
+        }
+        return {
+          GroupObject : ServiceValue.GroupObject ,
+          GroupFiles : FilesArray
+        } ;
+    }) , catchError((ErrorValue : HttpErrorResponse) => {
+      throw ErrorValue.error
+    })) ;
   }
 
   public GetGlobalGroupFile() {
-    return this.Request.get<FilesResponse>(`${Singleton.API}api/filemanagement/group/files/show` , {
-      headers : new HttpHeaders({'Authorization' : this.AccountUser.getToken()}) ,
-      params : new HttpParams().set('id_group' , 1)
-    }).pipe(map(Response => {
-      const FilesValue : Files[] = [] ;
-      if(Response.data.group)
-        Response.data.group.files.forEach(Value => {
-          FilesValue.push(this.ConfigureData(Value))
-        }) ;
-      return FilesValue ;
-    }) , catchError((ErrorResponse : HttpErrorResponse) => {
-      throw ErrorResponse.error ;
+    return this.GetPrivateGroupFile(Singleton.GlobalGroupID).pipe(map(ValeResponse => {
+      return ValeResponse.GroupFiles ;
+    }) , catchError(ErrorValue => {
+      throw ErrorValue ;
     }));
   }
 
@@ -145,13 +139,51 @@ export class FilesService {
     }));
   }
 
-  public ConfigureData(APIFile : FileResponse , GroupInfo ?: Group) {
-    const File_Item = this.AdapterProcess.Convert2File(APIFile) ;
-    if(GroupInfo)
-      this.PermissionService.GrantPrivateFilePermission(GroupInfo , File_Item) ;
+  public GetReportInfo(FileID : number) {
+    return this.Request.get<FilesResponse>(`${Singleton.API}api/filemanagement/file/report` , {
+      headers : new HttpHeaders({'Authorization' : this.AccountUser.getToken()}) ,
+      params : new HttpParams().set('id_file' , FileID)
+    }).pipe(take(1) , map(Response => {
+      const FileValue =  this.ConfigureData({
+        APIFile : Response.data.file
+      }) ;
+      return {
+        File : FileValue ,
+        Report : Response.data.file.report ,
+      } ;
+    }) , catchError((ResponseError : HttpErrorResponse) => {
+      throw ResponseError.error ;
+    }));
+  }
+
+  public GetAllMyFile() {
+    return this.Request.get<FilesResponse>(`${Singleton.API}api/filemanagement/file/show` , {
+      headers : new HttpHeaders({'Authorization' : this.AccountUser.getToken()})
+    }).pipe(map(Response => {
+      const FileValue : Files[] = [] ;
+      Response.data.files.forEach(Value => {
+        Value.user = {
+          id : this.AccountUser.ID ,
+          name : this.AccountUser.Name
+        } ;
+        FileValue.push(this.ConfigureData({APIFile : Value})) ;
+      });
+      return FileValue ;
+    }) , catchError((ErrorValue : HttpErrorResponse) => {
+      throw ErrorValue.error ;
+    }));
+  }
+
+  private ConfigureData(TypeFile : {
+    APIFile : FileResponse ,
+    GroupFile ?: Group
+  }) {
+    const FileValue = this.AdapterProcess.Convert2File(TypeFile.APIFile) ;
+    if(TypeFile.GroupFile)
+      this.PermissionProcess.GrantPrivateFilePermission(TypeFile.GroupFile , FileValue) ;
     else
-      this.PermissionService.GrantGlobalFilePermission(File_Item) ;
-    return File_Item ;
+      this.PermissionProcess.GrantGlobalFilePermission(FileValue) ;
+    return FileValue ;
   }
 
 }

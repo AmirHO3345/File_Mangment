@@ -1,13 +1,18 @@
 <section class="PopUp Show u-top-render ErrorPop__Popup"
-         *ngIf="this.ProcessType">
+         *ngIf="this.ProcessType != null">
   <div class="PopUp__Content PopUp__Content--Small u-text-align-Center">
     <div class="ErrorPop__Content">
-      <div class="ErrorPop__Icon">
-        <i class='bx bxs-error-alt'></i>
+      <div class="ErrorPop__Icon" [ngClass]="{
+      'ErrorPop__Icon--Error' :  this.ProcessType === this.GetTypeProcess().ErrorResult ,
+      'ErrorPop__Icon--Success' :  this.ProcessType === this.GetTypeProcess().SuccessResult
+      }">
+        <i class='bx bxs-error-alt' *ngIf="this.ProcessType === this.GetTypeProcess().ErrorResult" ></i>
+        <i class='bx bxs-check-circle' *ngIf="this.ProcessType === this.GetTypeProcess().SuccessResult"></i>
       </div>
       <div class="ErrorPop__Text">
-        <h2>{{(this.ProcessType === this.GetTypeProcess().SuccessResult)?
-          'Well Done' : 'Whoops'}}</h2>
+        <h2>
+          {{(this.ProcessType === this.GetTypeProcess().SuccessResult) ? 'Well Done' : 'Whoops'}}
+        </h2>
         <p>{{this.Message}}</p>
       </div>
       <div class="ErrorPop__Button">

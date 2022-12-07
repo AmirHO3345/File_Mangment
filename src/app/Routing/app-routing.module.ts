@@ -5,9 +5,10 @@ import {RegisterComponent} from "../Authentication/Register/Register.component";
 import {DirectoryComponent} from "../Directory/Directory.component";
 import {ErrorPageComponent} from "../Error/ErrorPage.component";
 import {GroupsIncludedComponent, GroupsPrivateComponent} from "../Directory/Groups/Groups.component";
-import {GlobalFilesComponent, PrivateFilesComponent} from "../Directory/Files/Files.component";
+import {GlobalFilesComponent, MyFilesComponent, PrivateFilesComponent} from "../Directory/Files/Files.component";
 import {Singleton} from "../Models/Singleton";
 import {AuthenticationGuard} from "../Authentication/Authentication.guard";
+import {ReportComponent} from "../Report/Report.component";
 
 
 const routes: Routes = [
@@ -18,8 +19,10 @@ const routes: Routes = [
       {path : `${Singleton.RoutingPage.Files}` , redirectTo : `${Singleton.RoutingPage.Groups.PublicG}` , pathMatch : "full" } ,
       {path : `${Singleton.RoutingPage.Groups.PublicG}` , component : GlobalFilesComponent} ,
       {path : `${Singleton.RoutingPage.Groups.PrivateG}` , component : GroupsPrivateComponent} ,
+      {path : `${Singleton.RoutingPage.Groups.MyFiles}` , component : MyFilesComponent} ,
       {path : `${Singleton.RoutingPage.Groups.IncludedG}` , component : GroupsIncludedComponent} ,
       {path : `${Singleton.RoutingPage.Files}/:id` , component : PrivateFilesComponent} ,
+      {path : `${Singleton.RoutingPage.Report}/:id` , component : ReportComponent}
     ] , canActivate : [AuthenticationGuard]} ,
   {path : `${Singleton.RoutingPage.ErrorPage}` , component : ErrorPageComponent } ,
   {path : '**' , redirectTo : `${Singleton.RoutingPage.ErrorPage}` , pathMatch : "full" }

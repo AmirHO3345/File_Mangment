@@ -4,6 +4,7 @@ import {RoutingProcessService} from "../Routing/RoutingProcess.service";
 import {Subscription} from "rxjs";
 import {Person} from "../Models/Person";
 import {LoaderService} from "../Component/Loader/Loader.service";
+import {Singleton} from "../Models/Singleton";
 
 @Component({
   selector : 'Navigations' ,
@@ -45,6 +46,10 @@ export class NavigationComponent implements OnInit , OnDestroy {
     this.AuthenticationProcess.SignOut().subscribe(() => {
       this.ProcessRouting.RefreshPage();
     });
+  }
+
+  GetSingleton() {
+    return Singleton ;
   }
 
   ngOnDestroy(): void {

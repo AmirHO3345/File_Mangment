@@ -3,6 +3,8 @@ export class Singleton {
 
   static readonly API = 'http://localhost/FilesManagementSystem/public/' ;
 
+  static readonly GlobalGroupID = 1 ;
+
   static readonly FormName = {
     Email : 'Email' ,
     Password : 'Password' ,
@@ -25,10 +27,12 @@ export class Singleton {
     Groups : {
       PublicG : 'publicGroup' ,
       PrivateG : 'privateGroup' ,
-      IncludedG : 'includedGroup'
+      IncludedG : 'includedGroup' ,
+      MyFiles : 'MyFiles'
     } ,
     Files : 'GroupFile' ,
-    ErrorPage : 'SomethingWrong'
+    Report : 'Report' ,
+    ErrorPage : 'SomethingWrong' ,
   } ;
 
 }

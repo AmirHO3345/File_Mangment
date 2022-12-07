@@ -1,9 +1,10 @@
 import {Injectable} from "@angular/core";
 import {Group} from "../Models/GroupsHandle";
 import {Person, PersonType} from "../Models/Person";
-import {FileResponse} from "../Directory/Files/Files.service";
+import {FileResponse, ReportResponse} from "../Directory/Files/Files.service";
 import {FileFactory} from "../Models/FilesHandle";
 import {GroupResponse} from "../Directory/Groups/Groups.service";
+import {Report} from "../Models/ReportHandle";
 
 export interface PersonResponse {
   data : {
@@ -29,7 +30,7 @@ export class AdapterService {
   }
 
   public Convert2Group(DataResponse : GroupResponse) {
-    return new Group (
+    const CurrentGroup = new Group (
       DataResponse.id ,
       DataResponse.name ,
       {
@@ -37,10 +38,11 @@ export class AdapterService {
         name : DataResponse.user.name
       } ,
       new Date(DataResponse.created_at)
-    ) ;
+    );
+    return CurrentGroup
   }
 
-  public Convert2File(DataResponse : FileResponse) {
+  public Convert2File(DataResponse : FileResponse , GroupContainer ?: Group) {
     let Booking = undefined ;
     if(!!DataResponse.user_bookings && DataResponse.user_bookings.length != 0)
       Booking = {
@@ -58,6 +60,17 @@ export class AdapterService {
       Created_Date : new Date(DataResponse.created_at) ,
       User_Booking : Booking
     } , 'Text') ;
+  }
+
+  public Convert2ReportFile(DataResponse : ReportResponse[]) {
+    let ReportCreate = new Report() ;
+    ReportCreate.SetNames(['User_ID' , 'User_Name'
+      , 'BookingDate' , 'UnBookingDate']) ;
+    DataResponse.forEach(Value => {
+      ReportCreate.SetValue([Value.id_user_booking.toString() , Value.name_user_booking ,
+        Value.booking_date , Value.unbooking_date]);
+    });
+    return ReportCreate ;
   }
 
 }
