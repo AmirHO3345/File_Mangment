@@ -11,8 +11,9 @@
           <Selector-Form
             [Name]="this.GetSingleton().FormName.NewObject" [FormName]="NewObject"
             DefaultValue="What value you want ? "
-            [Values]="['New File' , 'New Group']"
+            [Values]="['New File' , 'New Group' , 'Join User']"
             [Require]="true"
+            (Change)="this.ChangeObject($event)"
           ></Selector-Form>
         </div>
         <!-- New File -->
@@ -55,6 +56,24 @@
                    ngModel [name]="this.GetSingleton().FormName.GroupNameInput"
                    placeholder="GroupName" required>
             <label for="GroupName" class="Form__Label">Group Name</label>
+          </div>
+        </div>
+        <!-- Join User -->
+        <div *ngIf="NewObject.form.get(this.GetSingleton().FormName.NewObject) &&
+                  NewObject.form.get(this.GetSingleton().FormName.NewObject)?.value == 'Join User'">
+          <div class="Form__Group">
+            <input id="UserName" type="text" class="Form__Input"
+                   ngModel [name]="this.GetSingleton().FormName.UserNameInput"
+                   placeholder="UserName" required>
+            <label for="UserName" class="Form__Label">User Name</label>
+          </div>
+          <div class="Form__Group">
+            <Selector-Form
+              [Name]="this.GetSingleton().FormName.GroupInclude" [FormName]="NewObject"
+              DefaultValue="What Group you want User to included ? "
+              [Values]="this.GetGroupsName()"
+              [Require]="true"
+            ></Selector-Form>
           </div>
         </div>
       </div>

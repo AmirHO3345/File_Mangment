@@ -16,7 +16,8 @@ export class Singleton {
     FileUpload : 'FileUpload' ,
     NewObject : 'New_Object' ,
     GroupInclude : 'GroupInclude' ,
-    GroupNameInput : 'Group_Name'
+    GroupNameInput : 'Group_Name' ,
+    UserNameInput : 'User Name'
   } ;
 
   static readonly RoutingPage = {
@@ -28,9 +29,13 @@ export class Singleton {
       PublicG : 'publicGroup' ,
       PrivateG : 'privateGroup' ,
       IncludedG : 'includedGroup' ,
+      AllGroups : 'WebSiteGroup' ,
       MyFiles : 'MyFiles'
     } ,
     Files : 'GroupFile' ,
+    AllFiles : 'WebSiteFile' ,
+    Users : 'GroupUser' ,
+    AllUsers : 'WebSiteUser' ,
     Report : 'Report' ,
     ErrorPage : 'SomethingWrong' ,
   } ;

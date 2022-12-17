@@ -1,6 +1,6 @@
 import {Injectable} from "@angular/core";
 import {Group} from "../Models/GroupsHandle";
-import {Person} from "../Models/Person";
+import {Person, User} from "../Models/Person";
 import {AuthenticationService} from "../Authentication/Authentication.service";
 import {Files} from "../Models/FilesHandle";
 
@@ -61,6 +61,25 @@ export class PermissionService {
       Report : FileReport ,
       NotBooking : FileEdit ,
       Edit : FileEdit
+    }) ;
+  }
+
+  public GrantPrivateUserPermission(Group_Item : Group , User_Item : User) {
+    if(this.MyAccount === null)
+      return ;
+    const UserDelete = Group_Item.Admin.ID === this.MyAccount.ID ||
+      this.MyAccount.getTypePerson() === "Admin" ;
+    User_Item.SetPermission({
+      CanDelete : UserDelete
+    }) ;
+  }
+
+  public GrantGlobalUserPermission(User_Item : User) {
+    if(this.MyAccount === null)
+      return ;
+    const UserDelete = this.MyAccount.getTypePerson() === "Admin" ;
+    User_Item.SetPermission({
+      CanDelete : UserDelete
     }) ;
   }
 

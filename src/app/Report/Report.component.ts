@@ -4,6 +4,7 @@ import {Report} from "../Models/ReportHandle";
 import {ReportService} from "./Report.service";
 import {RoutingProcessService} from "../Routing/RoutingProcess.service";
 import {ErrorHandlerManual, FactoryErrors} from "../Models/ErrorHandler";
+import {DatePipe} from "@angular/common";
 
 @Component({
   selector : 'Report' ,
@@ -19,7 +20,8 @@ export class ReportComponent implements OnInit {
   ReportDetails !: Report ;
 
   constructor(private ReportProcess : ReportService ,
-              private RoutingProcess : RoutingProcessService) {
+              private RoutingProcess : RoutingProcessService ,
+              public  DateTransformer: DatePipe) {
     this.Error_Handler = FactoryErrors.GetErrorObject({Report : true}) ;
   }
 

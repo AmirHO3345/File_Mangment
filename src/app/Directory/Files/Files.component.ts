@@ -12,6 +12,10 @@ export abstract class FileComponent {
 
   ItemsFile : Files[] ;
 
+  SelectFile : number[] ;
+
+  IsRefresh : boolean ;
+
   Error_Handler : ErrorHandlerManual ;
 
   constructor(protected FileProcess : FilesService ,
@@ -19,9 +23,11 @@ export abstract class FileComponent {
               protected LoadingProcess : LoaderService ,
               protected PopupProcess : ProcessPopupService) {
     this.ItemsFile = [] ;
+    this.SelectFile = [] ;
     this.Error_Handler = FactoryErrors.GetErrorObject({
       Files : true
     }) ;
+    this.IsRefresh = false ;
   }
 
   public ParserCommandFile(FileInfo : {
@@ -30,9 +36,6 @@ export abstract class FileComponent {
     FileUpload ?: File
   })  {
     switch (FileInfo.FileCommand) {
-      case CommandsFile.Booking :
-        this.BookingFile(FileInfo.FileItem.FileInfo.ID);
-        break ;
       case CommandsFile.NotBooking :
         this.NotBookingFile(FileInfo.FileItem.FileInfo.ID);
         break ;
@@ -43,11 +46,17 @@ export abstract class FileComponent {
         this.GetReport(FileInfo.FileItem.FileInfo.ID);
         break ;
       case CommandsFile.Download :
-        this.GetDownloadFile(FileInfo.FileItem.FileInfo.ID);
+        this.GetDownloadFile(FileInfo.FileItem);
         break ;
       case CommandsFile.Edit :
         if(FileInfo.FileUpload)
           this.EditFile(FileInfo.FileItem.FileInfo.ID , FileInfo.FileUpload) ;
+        break ;
+      case CommandsFile.Selected :
+          this.SelectedFile(FileInfo.FileItem.FileInfo.ID) ;
+        break ;
+      case CommandsFile.UnSelected :
+        this.UnSelectedFile(FileInfo.FileItem.FileInfo.ID) ;
         break ;
     }
   }
@@ -67,10 +76,13 @@ export abstract class FileComponent {
     });
   }
 
-  protected BookingFile(FileID : number) {
-    this.LoadingProcess.ActiveTask();
-    this.FileProcess.ReserveFile([FileID]).subscribe(() => {
-      this.UpdateFileData();
+  public BookingFile() {
+    if(this.SelectFile.length < 1)
+      return ;
+    this.LoadingProcess.ActiveTask() ;
+    this.FileProcess.ReserveFile(this.SelectFile).subscribe(() => {
+      this.SelectFile = [] ;
+      this.UpdateFileData() ;
     } , ErrorValue => {
       this.Error_Handler.Error_Server(ErrorValue) ;
       this.PopupProcess.ViewPopup("Error", this.Error_Handler.ErrorOccur.Error_Message ) ;
@@ -89,6 +101,21 @@ export abstract class FileComponent {
     });
   }
 
+  protected SelectedFile(FileID : number) {
+    this.SelectFile.push(FileID) ;
+  }
+
+  protected UnSelectedFile(FileID : number) {
+    const IndexSelect = this.SelectFile.indexOf(FileID) ;
+    if(IndexSelect > -1)
+      this.SelectFile.splice(IndexSelect , 1) ;
+  }
+
+  public UnSelectedAll() {
+    this.SelectFile = [] ;
+    this.RefreshItems() ;
+  }
+
   protected EditFile(FileID : number , UploadFile : File) {
     this.LoadingProcess.ActiveTask();
     this.FileProcess.EditFile(UploadFile , FileID).subscribe(() => {
@@ -100,12 +127,20 @@ export abstract class FileComponent {
     this.RoutingProcess.Route2Report(FileID) ;
   }
 
-  protected GetDownloadFile(FileID : number) {
-    /* GetFileData */
+  protected GetDownloadFile(FileItem : Files) {
+    this.FileProcess.DownloadFile(FileItem).subscribe();
+  }
+
+  public RefreshItems() {
+    this.LoadingProcess.ActiveTask() ;
+    this.IsRefresh = true ;
+    setTimeout(() => {
+      this.IsRefresh = false ;
+      this.LoadingProcess.DoneTask() ;
+    } , 500) ;
   }
 
 }
-
 
 @Component({
   templateUrl : './Files.component.html' ,
@@ -142,7 +177,6 @@ export class GlobalFilesComponent extends FileComponent implements OnInit {
   }
 
 }
-
 
 @Component({
   templateUrl : './Files.component.html' ,
@@ -208,6 +242,40 @@ export class MyFilesComponent extends FileComponent implements OnInit {
   protected InitialData() {
     this.LoadingProcess.ActiveTask() ;
     this.FileProcess.GetAllMyFile().subscribe(Value => {
+      this.ItemsFile = Value ;
+      this.LoadingProcess.DoneTask() ;
+    } , () => {
+      this.LoadingProcess.DoneTask() ;
+    }) ;
+  }
+
+  protected UpdateFileData() {
+    this.InitialData();
+  }
+
+}
+
+@Component({
+  templateUrl : './Files.component.html' ,
+  styleUrls : ['./Files.component.css']
+})
+export class AllWebSiteFiles extends FileComponent implements OnInit {
+
+  constructor(protected override FileProcess : FilesService ,
+              protected override RoutingProcess : RoutingProcessService ,
+              protected override LoadingProcess : LoaderService ,
+              protected override PopupProcess : ProcessPopupService) {
+    super(FileProcess  , RoutingProcess , LoadingProcess , PopupProcess) ;
+    this.ItemsFile = [] ;
+  }
+
+  ngOnInit() : void {
+    this.InitialData();
+  }
+
+  protected InitialData() {
+    this.LoadingProcess.ActiveTask() ;
+    this.FileProcess.GetWebSiteFiles().subscribe(Value => {
       this.ItemsFile = Value ;
       this.LoadingProcess.DoneTask() ;
     } , () => {

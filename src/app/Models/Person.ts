@@ -38,7 +38,43 @@ export class Person {
 
 }
 
+export class User {
+
+  readonly ID : number ;
+
+  readonly Name : string ;
+
+  readonly Email : string ;
+
+  readonly Role : PersonType ;
+
+  private Permission !: {
+    CanDelete : boolean
+  }
+
+  constructor(id : number , name : string , email : string , role : 'Admin' | 'User') {
+    this.ID = id ;
+    this.Name = name ;
+    this.Email = email ;
+    this.Role = (role === "Admin")? PersonType.Admin : PersonType.User ;
+  }
+
+  public SetPermission(PermissionGrant : {CanDelete : boolean}) {
+    if(this.Permission === undefined)
+      this.Permission = PermissionGrant ;
+  }
+
+  public GetPermission() {
+    return {...this.Permission} ;
+  }
+
+}
+
 export enum PersonType {
   User ,
   Admin
+}
+
+export enum CommandUser {
+  DeleteUser
 }

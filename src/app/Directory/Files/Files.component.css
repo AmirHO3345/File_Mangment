@@ -1,6 +1,44 @@
 
 .Files {
+  position: relative ;
   display: grid ;
   grid-template-columns : repeat(auto-fill , minmax(30rem , 1fr)) ;
   grid-gap: 3rem ;
 }
+
+.Files__Reserve {
+  position: fixed ;
+  display: flex ;
+  flex-direction: column ;
+  gap : 20px ;
+  bottom: 1rem ;
+  right : 2rem ;
+  align-items: center ;
+}
+
+.Files__Button {
+  font-size: 3.5rem ;
+  padding: 1.5rem ;
+  border-radius: 50% ;
+  transition: all .4s ;
+}
+
+.Files__Button--Add {
+  color : var(--primaryColor) ;
+}
+
+.Files__Button--Remove {
+  color : var(--dangerColor) ;
+}
+
+.Files__Button--Add:hover {
+  background-color: var(--primaryColor) ;
+  color : var(--whiteColor1) ;
+}
+
+.Files__Button--Remove:hover {
+  background-color: var(--dangerColor) ;
+  color : var(--whiteColor1) ;
+}
+
+

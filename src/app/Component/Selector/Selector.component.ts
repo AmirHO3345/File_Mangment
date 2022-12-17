@@ -1,4 +1,4 @@
-import {AfterViewInit, Component, Input, ViewChild} from "@angular/core";
+import {Component, EventEmitter, Input, Output} from "@angular/core";
 import {NgForm} from "@angular/forms";
 
 @Component({
@@ -18,6 +18,12 @@ export class SelectorComponent {
 
   @Input('DefaultValue') SelectorValueDefault : string ;
 
+  @Output('Change') get ChangeValue() {
+    return this.ValueChanging
+  }
+
+  private readonly ValueChanging : EventEmitter<string>
+
   OpenOption : boolean ;
 
   constructor() {
@@ -26,12 +32,14 @@ export class SelectorComponent {
     this.SelectorValues = [] ;
     this.SelectorValueDefault = '' ;
     this.RequireSelector = false ;
+    this.ValueChanging = new EventEmitter<string>() ;
   }
 
   onClickOption(FormInfo : NgForm , Value : string) {
     FormInfo.form.controls[this.SelectorName].setValue(Value)  ;
     this.SelectorForm.form.controls[this.SelectorName] =
       FormInfo.form.controls[this.SelectorName] ;
+    this.ValueChanging.next(Value) ;
   }
 
   onOpenOption() {

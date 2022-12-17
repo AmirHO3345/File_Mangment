@@ -1,4 +1,6 @@
 <div class="File" *ngIf="this.ItemFile">
+  <i class='bx bxs-badge-check File__Check'
+      *ngIf="this.IsSelected"></i>
   <div class="File__Icon">
     <i [class]='this.GetIconFile()'></i>
   </div>
@@ -29,18 +31,25 @@
           *ngIf="this.ItemFile.GetPermission().CanReport">
         <i class='bx bxs-report'></i></li>
       <li class="File__Button File__Button--Add"
-          (click)="this.SendCommand(this.GetAllCommands().Booking)"
-          *ngIf="!this.ItemFile.IsBooking()">
+          (click)="this.SendCommand(this.GetAllCommands().Selected)"
+          *ngIf="!this.ItemFile.IsBooking() && !this.IsSelected">
         <i class='bx bxs-bookmark-star'></i></li>
       <li class="File__Button File__Button--Add"
           *ngIf="this.ItemFile.GetPermission().CanEdit">
         <input type="file" id="FileEdit" style="display: none" (change)="this.EditFile($event)">
         <label for="FileEdit" style="cursor: pointer"><i class='bx bxs-edit'></i></label>
       </li>
+      <li class="File__Button File__Button--Add"
+          (click)="this.SendCommand(this.GetAllCommands().Download)">
+        <i class='bx bxs-download'></i></li>
+      <li class="File__Button File__Button--Remove"
+          (click)="this.SendCommand(this.GetAllCommands().UnSelected)"
+          *ngIf="this.IsSelected">
+        <i class='bx bxs-bookmark-minus' ></i></li>
       <li class="File__Button File__Button--Remove"
           (click)="this.SendCommand(this.GetAllCommands().NotBooking)"
           *ngIf="this.ItemFile.GetPermission().CanNotBooking">
-        <i class='bx bxs-bookmark-minus' ></i></li>
+        <i class='bx bxs-bookmark-alt-minus'></i></li>
     </ul>
   </div>
 </div>

@@ -14,7 +14,9 @@
       </p>
       <p class="Report__Details-info">
         <span class="Key">Create at : </span>
-        <span class="Value">{{this.FileDetails.FileInfo.Created_Date}}</span>
+        <span class="Value">
+          {{this.DateTransformer.transform(this.FileDetails.FileInfo.Created_Date , 'yyyy.MM.dd h:mm a')}}
+        </span>
       </p>
       <p class="Report__Details-info">
         <span class="Key">Owner Name : </span>

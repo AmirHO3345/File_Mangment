@@ -1,0 +1,22 @@
+<div class="User" *ngIf="this.ItemUser">
+  <div class="User__Icon">
+    <i class='bx bxs-user'></i>
+  </div>
+  <div class="User__Text">
+    <h3 class="User__Name">{{this.ItemUser.Name}}</h3>
+    <p class="User__Details">
+      Email <span class="Focus">{{this.ItemUser.Email}}</span>
+    </p>
+    <p class="User__Details">
+      User Type :  <span class="Focus">{{this.ItemUser.Role}}</span>
+    </p>
+  </div>
+  <div class="User__Options">
+    <ul>
+      <li class="User__Button User__Button--Remove"
+          *ngIf="this.ItemUser.GetPermission().CanDelete"
+          (click)="this.SendCommand(this.GetAllCommand().DeleteUser)">
+        <i class='bx bxs-x-circle'></i></li>
+    </ul>
+  </div>
+</div>

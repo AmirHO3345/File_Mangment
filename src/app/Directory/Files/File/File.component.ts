@@ -11,6 +11,8 @@ export class FileComponent {
 
   ItemFile !: Files ;
 
+  IsSelected : boolean ;
+
   private readonly CommandOut : EventEmitter<{
     FileItem : Files ,
     FileCommand : CommandsFile ,
@@ -28,6 +30,7 @@ export class FileComponent {
   constructor(public DateTransformer: DatePipe) {
     this.CommandOut = new EventEmitter<{FileItem : Files
       , FileCommand: CommandsFile , FileUpload ?: File}>();
+    this.IsSelected = false ;
   }
 
   GetIconFile() {
@@ -54,6 +57,10 @@ export class FileComponent {
       FileCommand : FileCommand ,
       FileUpload : FileUpload
     }) ;
+    if(FileCommand === CommandsFile.Selected)
+      this.IsSelected = true ;
+    else if(FileCommand === CommandsFile.UnSelected)
+      this.IsSelected = false ;
   }
 
   GetAllCommands() {

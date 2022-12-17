@@ -55,6 +55,7 @@ export class FactoryErrors {
     NewCreate ?: boolean ,
     Groups ?: boolean ,
     Files ?: boolean ,
+    User ?: boolean ,
     Report ?: boolean
   }) : ErrorHandlerManual {
     if(Message.Authentication)
@@ -65,6 +66,8 @@ export class FactoryErrors {
       return new FilesError() ;
     if(Message.Groups)
       return new GroupsError() ;
+    if(Message.User)
+      return new UsersError() ;
     if(Message.Report)
       return new ReportError() ;
     return new UnKnownError() ;
@@ -170,6 +173,10 @@ export class FilesError extends ErrorHandlerManual {
         , 'This Error Is Undefined' , true) ;
     }
   }
+
+}
+
+export class UsersError extends ErrorHandlerManual {
 
 }
 

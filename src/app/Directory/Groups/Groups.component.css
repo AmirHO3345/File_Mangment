@@ -4,3 +4,38 @@
   grid-template-columns : repeat(auto-fill , minmax(30rem , 1fr)) ;
   grid-gap: 3rem ;
 }
+
+.Groups__Route {
+  display: flex ;
+  align-items: center ;
+}
+
+.Groups__Route {
+  height: 50%;
+}
+
+.Groups__Route i {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50% , -50%);
+  color: var(--primaryColor);
+  font-size: 6rem;
+  margin-bottom: 1.2rem;
+  border-radius: 50%;
+  padding: 1.4rem;
+  cursor: pointer;
+  transition: all .4s;
+}
+
+.Groups__Route i:hover {
+  background-color: var(--primaryColor);
+  color : #fff ;
+}
+
+.Groups__User ,
+.Groups__File {
+  position: relative ;
+  flex-basis: 50% ;
+  height : 100% ;
+}

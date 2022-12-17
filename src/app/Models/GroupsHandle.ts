@@ -51,5 +51,8 @@ export class Group {
 export enum CommandType {
   GroupEnter ,
   ReportEnter ,
-  DeleteGroup
+  DeleteGroup ,
+  ClosePopup,
+  GroupUsers ,
+  GroupFiles
 }

@@ -1,7 +1,15 @@
 
 <div class="Files">
-  <File_Item *ngFor="let Item of this.ItemsFile"
-             [FileData]="Item"
-             (GetCommand)="this.ParserCommandFile({FileItem : $event.FileItem
+  <ng-template ngFor let-Item [ngForOf]="this.ItemsFile">
+    <File_Item *ngIf="!this.IsRefresh"
+               [FileData]="Item"
+               (GetCommand)="this.ParserCommandFile({FileItem : $event.FileItem
              , FileCommand : $event.FileCommand , FileUpload : $event.FileUpload })"></File_Item>
+  </ng-template>
+  <div class="Files__Reserve" *ngIf="this.SelectFile.length > 0">
+    <i class='bx bxs-bookmark-minus Files__Button Files__Button--Remove'
+       (click)="this.UnSelectedAll()"></i>
+    <i class='bx bxs-bookmark-alt-plus Files__Button Files__Button--Add'
+        (click)="this.BookingFile()"></i>
+  </div>
 </div>

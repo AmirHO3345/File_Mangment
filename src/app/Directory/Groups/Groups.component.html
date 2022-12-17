@@ -5,4 +5,29 @@
     [SetData]="Item"
     (GetCommand)="this.ParserCommandGroup($event)"
     ></Group_Item>
+
+  <div class="PopUp Show u-top-render Groups__Popup"
+        *ngIf="this.PopupInfo.GroupInfo != null" >
+    <i class='bx bxs-x-circle PopUp__Close'
+       (click)="this.ParserCommandGroup({
+        GroupItem : this.PopupInfo.GroupInfo ,
+        GroupCommand : this.GetAllCommands().ClosePopup
+       })" ></i>
+    <div class="PopUp__Content PopUp__Content--Small Groups__Route">
+      <div class="Groups__User">
+        <i class='bx bxs-user'
+           (click)="this.ParserCommandGroup({
+        GroupItem : this.PopupInfo.GroupInfo ,
+        GroupCommand : this.GetAllCommands().GroupUsers
+       })"></i>
+      </div>
+      <div class="Groups__File">
+        <i class="bx bxs-file"
+        (click)="this.ParserCommandGroup({
+        GroupItem : this.PopupInfo.GroupInfo ,
+        GroupCommand : this.GetAllCommands().GroupFiles
+       })"></i>
+      </div>
+    </div>
+  </div>
 </div>

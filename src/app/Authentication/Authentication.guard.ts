@@ -16,24 +16,47 @@ export class AuthenticationGuard implements CanActivate {
 
   canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<boolean | UrlTree> |
     Promise<boolean | UrlTree> | boolean | UrlTree {
-    // this.LoadingProcess.ActiveTask('Guard') ;
+    this.LoadingProcess.ActiveTask() ;
     if(this.AuthenticationProcess.AccountSnapshot() != null) {
-      // this.LoadingProcess.DoneTask('Guard') ;
+      this.LoadingProcess.DoneTask() ;
       return true ;
     }
     const LoginProcess = this.AuthenticationProcess.AutoLogin() ;
     if(LoginProcess instanceof Observable)
       return LoginProcess.pipe(map(Value => {
-        // this.LoadingProcess.DoneTask('Guard') ;
+        this.LoadingProcess.DoneTask() ;
         if(Value)
           return true ;
         else
           return this.RoutingProcess
             .GetUrlTree(['/' , `${Singleton.RoutingPage.Authentication.SignIn}`]) ;
       })) ;
-    // this.LoadingProcess.DoneTask('Guard') ;
+    this.LoadingProcess.DoneTask() ;
     return this.RoutingProcess
       .GetUrlTree(['/' , `${Singleton.RoutingPage.Authentication.SignIn}`]) ;
+  }
+
+}
+
+
+@Injectable({providedIn : 'root'})
+export class AdminGuard implements CanActivate {
+
+  constructor(private AuthenticationProcess : AuthenticationService ,
+              private RoutingProcess : RoutingProcessService ,
+              private LoadingProcess : LoaderService) {
+  }
+
+  canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot):
+    Observable<boolean | UrlTree> | Promise<boolean | UrlTree> | boolean | UrlTree {
+    this.LoadingProcess.ActiveTask() ;
+    const MyAccount = this.AuthenticationProcess.AccountSnapshot() ;
+    if(MyAccount && MyAccount.getTypePerson() == "Admin") {
+      this.LoadingProcess.DoneTask() ;
+      return true;
+    }
+    this.LoadingProcess.DoneTask() ;
+    return this.RoutingProcess.GetUrlTree(['/' , `${Singleton.RoutingPage.ErrorPage}`]) ;
   }
 
 }

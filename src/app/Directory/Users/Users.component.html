@@ -1,0 +1,8 @@
+
+<div class="Users">
+  <User_Item *ngFor="let Item of this.User_Items"
+             [UserData]="Item"
+             (GetCommand)="this.ParserCommandGroup({UserItem : $event.Item
+             , UserCommand : $event.Command})"
+  ></User_Item>
+</div>

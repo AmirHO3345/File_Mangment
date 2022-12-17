@@ -8,6 +8,7 @@ import {Person} from "../../Models/Person";
 import {Group} from "../../Models/GroupsHandle";
 import {FileResponse} from "../Files/Files.service";
 import {PermissionService} from "../../Permission/Permission.service";
+import {UserResponse} from "../Users/Users.service";
 
 
 export interface GroupResponse {
@@ -21,6 +22,7 @@ export interface GroupResponse {
     name: string
   } ;
   files : FileResponse[] ;
+  users : UserResponse[] ;
 }
 
 interface GroupsResponse {
@@ -130,13 +132,39 @@ export class GroupsService {
     }));
   }
 
+  public GetGroupWithUser(GroupID : number) {
+    return this.Request.get<GroupsResponse>(`${Singleton.API}api/filemanagement/group/users/show` , {
+      headers : new HttpHeaders({'Authorization' : this.AccountUser.getToken()}) ,
+      params : new HttpParams().set('id_group' , GroupID)
+    }).pipe(map(ResponseValue => {
+      const MainGroup = this.ConfigureData(ResponseValue.data.group) ;
+      return {
+        GroupObject : MainGroup.Group ,
+        GroupUsers : MainGroup.User
+      } ;
+    }));
+  }
+
+  public GetWebSiteGroups() {
+    return this.Request.get<GroupsResponse>(`${Singleton.API}api/filemanagement/group/all` , {
+      headers : new HttpHeaders({'Authorization' : this.AccountUser.getToken()})
+    }).pipe(map(Response => {
+      const WebSiteGroups : Group[] = [] ;
+      Response.data.groups.forEach(Value =>
+        WebSiteGroups.push(this.ConfigureData(Value).Group)) ;
+      return WebSiteGroups ;
+    })) ;
+  }
+
   private ConfigureData(APIGroup : GroupResponse) {
     const GroupValue = this.AdapterProcess.Convert2Group(APIGroup) ;
     const FileValue = (APIGroup.files)? APIGroup.files : undefined ;
+    const UserValue = (APIGroup.users)? APIGroup.users : undefined ;
     this.PermissionProcess.GrantGroupPermission(GroupValue) ;
     return {
       Group : GroupValue ,
-      File : FileValue
+      File : FileValue ,
+      User : UserValue
     } ;
   }
 

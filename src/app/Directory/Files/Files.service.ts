@@ -174,6 +174,29 @@ export class FilesService {
     }));
   }
 
+  public GetWebSiteFiles() {
+    return this.Request.get<FilesResponse>(`${Singleton.API}api/filemanagement/file/all` , {
+      headers : new HttpHeaders({'Authorization' : this.AccountUser.getToken()})
+    }).pipe(map(Response => {
+      const WebSiteFile : Files[] = [] ;
+      Response.data.files.forEach(Value =>
+        WebSiteFile.push(this.ConfigureData({APIFile : Value})));
+      return WebSiteFile
+    }) , catchError((ErrorValue : HttpErrorResponse) => {
+      throw ErrorValue.error ;
+    }));
+  }
+
+  public DownloadFile(FileItem : Files) {
+    return this.Request.get<ArrayBuffer>(`${Singleton.API}${FileItem.FileInfo.Path}` , {
+      headers : new HttpHeaders({'Authorization' : this.AccountUser.getToken()})
+    }).pipe(take(1) , map(Response => {
+        const BlobFile = new Blob([Response]) ;
+        const URLFile = URL.createObjectURL(BlobFile) ;
+        const OpenURL = open(URLFile) ;
+      }))
+  }
+
   private ConfigureData(TypeFile : {
     APIFile : FileResponse ,
     GroupFile ?: Group

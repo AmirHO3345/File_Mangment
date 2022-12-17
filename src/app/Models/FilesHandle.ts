@@ -128,6 +128,8 @@ export enum CommandsFile {
   Delete ,
   Report ,
   NotBooking,
+  Selected ,
+  UnSelected ,
   Download ,
   Edit
 }

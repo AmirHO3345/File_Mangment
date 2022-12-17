@@ -1,10 +1,11 @@
 import {Injectable} from "@angular/core";
 import {Group} from "../Models/GroupsHandle";
-import {Person, PersonType} from "../Models/Person";
+import {Person, PersonType, User} from "../Models/Person";
 import {FileResponse, ReportResponse} from "../Directory/Files/Files.service";
 import {FileFactory} from "../Models/FilesHandle";
 import {GroupResponse} from "../Directory/Groups/Groups.service";
 import {Report} from "../Models/ReportHandle";
+import {UserResponse} from "../Directory/Users/Users.service";
 
 export interface PersonResponse {
   data : {
@@ -60,6 +61,12 @@ export class AdapterService {
       Created_Date : new Date(DataResponse.created_at) ,
       User_Booking : Booking
     } , 'Text') ;
+  }
+
+  public Convert2User(DataResponse : UserResponse) {
+    const RoleType = (DataResponse.role === 'user')? 'User' : 'Admin' ;
+    return new User(DataResponse.id , DataResponse.name , DataResponse.email ,
+      RoleType) ;
   }
 
   public Convert2ReportFile(DataResponse : ReportResponse[]) {

@@ -17,10 +17,16 @@ import {ReportComponent} from "./Report/Report.component";
 import {FileComponent} from "./Directory/Files/File/File.component";
 import {DatePipe} from "@angular/common";
 import {ErrorPageComponent} from "./Error/ErrorPage.component";
-import {GroupsIncludedComponent, GroupsPrivateComponent} from "./Directory/Groups/Groups.component";
-import {GlobalFilesComponent, MyFilesComponent, PrivateFilesComponent} from "./Directory/Files/Files.component";
+import {AllWebSiteGroups, GroupsIncludedComponent, GroupsPrivateComponent} from "./Directory/Groups/Groups.component";
+import {
+  AllWebSiteFiles,
+  GlobalFilesComponent,
+  MyFilesComponent,
+  PrivateFilesComponent
+} from "./Directory/Files/Files.component";
 import {ProcessPopupComponent} from "./Component/ProcessPopup/ProcessPopup.component";
-import {UsersComponent} from "./Directory/Users/Users.component";
+import {UserComponent} from "./Directory/Users/User/User.component";
+import {UsersGlobalComponent, UsersPrivateComponent} from "./Directory/Users/Users.component";
 
 @NgModule({
   declarations: [
@@ -41,8 +47,12 @@ import {UsersComponent} from "./Directory/Users/Users.component";
     PrivateFilesComponent ,
     ErrorPageComponent ,
     ProcessPopupComponent ,
-    UsersComponent ,
-    MyFilesComponent
+    MyFilesComponent ,
+    AllWebSiteFiles ,
+    AllWebSiteGroups ,
+    UserComponent ,
+    UsersPrivateComponent ,
+    UsersGlobalComponent
   ],
   imports: [
     BrowserModule,

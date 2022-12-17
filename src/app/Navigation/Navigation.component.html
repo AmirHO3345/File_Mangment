@@ -14,6 +14,30 @@
           <span class="NavMenu__ButtonName">Public Group</span>
         </a>
       </li>
+      <li class="NavMenu__Button-Link"
+          *ngIf="this.UserAccount && this.UserAccount.getTypePerson() === 'Admin'">
+        <a [routerLink]="[ '/' , this.GetSingleton().RoutingPage.Groups.AllGroups]"
+           routerLinkActive="activeRoute" >
+          <i class='bx bxs-shield'></i>
+          <span class="NavMenu__ButtonName">WebSite Groups</span>
+        </a>
+      </li>
+      <li class="NavMenu__Button-Link"
+          *ngIf="this.UserAccount && this.UserAccount.getTypePerson() === 'Admin'">
+        <a [routerLink]="[ '/' , this.GetSingleton().RoutingPage.AllFiles]"
+           routerLinkActive="activeRoute" >
+          <i class='bx bxs-shield'></i>
+          <span class="NavMenu__ButtonName">WebSite Files</span>
+        </a>
+      </li>
+      <li class="NavMenu__Button-Link"
+          *ngIf="this.UserAccount && this.UserAccount.getTypePerson() === 'Admin'">
+        <a [routerLink]="[ '/' , this.GetSingleton().RoutingPage.AllUsers]"
+           routerLinkActive="activeRoute" >
+          <i class='bx bxs-shield'></i>
+          <span class="NavMenu__ButtonName">WebSite Users</span>
+        </a>
+      </li>
       <li class="NavMenu__Button-Link">
         <a [routerLink]="[ '/' , this.GetSingleton().RoutingPage.Groups.PrivateG]"
            routerLinkActive="activeRoute" >

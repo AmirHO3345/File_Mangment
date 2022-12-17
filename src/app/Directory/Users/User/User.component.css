@@ -1,5 +1,5 @@
 
-.File {
+.User {
   position: relative ;
   display: flex ;
   align-items: center ;
@@ -11,22 +11,13 @@
   transition: all .3s ;
 }
 
-.File:hover {
+.User:hover {
   padding: 1rem 1rem 4.5rem 1rem ;
   transform: scale(1.05);
   box-shadow: .5rem .7rem 1.5rem -.6rem rgba(0, 0, 0, .4);
 }
 
-.File__Check {
-  position: absolute;
-  top: 1rem;
-  right: 1.5rem;
-  font-size: 2rem;
-  color: var(--primaryColor);
-  opacity: .8 ;
-}
-
-.File__Icon i {
+.User__Icon i {
   font-size : 8rem ;
   background-color: #00A8FF ;
   border-radius: 50% ;
@@ -34,24 +25,25 @@
   color : #fff ;
 }
 
-.File__Text {
+.User__Text {
   text-align: center ;
 }
 
-.File__Name {
+.User__Name {
   font-size: 1.8rem;
   font-weight: 900;
   color: var(--blackColor);
   margin-bottom: 1rem ;
+  cursor: pointer ;
 }
 
-.File__Details {
+.User__Details {
   font-size: 1.3rem;
   font-weight: 500;
   color: var(--grayColor1);
 }
 
-.File__Details:not(:last-child) {
+.User__Details:not(:last-child) {
   margin-bottom: 1rem ;
 }
 
@@ -63,7 +55,7 @@
   margin-left : .2rem ;
 }
 
-.File__Options {
+.User__Options {
   position: absolute ;
   left : 50% ;
   bottom: .5rem ;
@@ -74,12 +66,12 @@
   transition: all .3s ;
 }
 
-.File:hover .File__Options {
+.User:hover .User__Options {
   opacity: 1 ;
   visibility: visible;
 }
 
-.File__Options ul {
+.User__Options ul {
   display: flex ;
   align-items: center ;
   justify-content: center ;
@@ -87,7 +79,8 @@
   font-size: 2rem ;
 }
 
-.File__Button {
+.User__Button {
+
   border-radius: 50% ;
   width : 3rem ;
   height : 3rem ;
@@ -97,20 +90,20 @@
   transition: all .3s ;
 }
 
-.File__Button--Add {
+.User__Button--Add {
   color : var(--primaryColor) ;
 }
 
-.File__Button--Remove {
-  color : var(--dangerColor) ;
+.User__Button--Remove {
+  color: var(--dangerColor) ;
 }
 
-.File__Button--Add:hover {
+.User__Button--Add:hover {
   background-color: var(--primaryColor) ;
   color : #fff ;
 }
 
-.File__Button--Remove:hover {
+.User__Button--Remove:hover {
   background-color: var(--dangerColor) ;
   color : #fff ;
 }
