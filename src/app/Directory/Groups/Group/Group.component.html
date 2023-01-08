@@ -20,10 +20,6 @@
           (click)="this.SendCommand(this.GetAllCommands().DeleteGroup)"
           *ngIf="this.Group_Item.GetPermission().CanDelete">
         <i class='bx bxs-x-circle'></i></li>
-      <li class="Group__Button Group__Button--Add"
-          (click)="this.SendCommand(this.GetAllCommands().ReportEnter)"
-          *ngIf="this.Group_Item.GetPermission().CanReport">
-        <i class='bx bxs-info-circle'></i></li>
     </ul>
   </div>
 </div>

@@ -33,8 +33,7 @@ export class PermissionService {
   public GrantGlobalFilePermission(File_Item : Files) {
     if(this.MyAccount === null)
       return ;
-    let FileDelete = (!File_Item.IsBooking()) && (this.MyAccount.getTypePerson() === "Admin" ||
-      this.MyAccount.ID === File_Item.FileInfo.Owner.ID) ;
+    let FileDelete = false ;
     const FileReport = this.MyAccount.getTypePerson() === "Admin" ||
       this.MyAccount.ID === File_Item.FileInfo.Owner.ID ;
     const FileEdit = File_Item.IsBooking()
@@ -51,9 +50,9 @@ export class PermissionService {
     if(this.MyAccount === null)
       return ;
     const FileDelete = (!File_Item.IsBooking()) && (this.MyAccount.getTypePerson() === "Admin" ||
-      this.MyAccount.ID === Group_Item.ID || this.MyAccount.ID === File_Item.FileInfo.Owner.ID) ;
+      this.MyAccount.ID === Group_Item.Admin.ID || this.MyAccount.ID === File_Item.FileInfo.Owner.ID) ;
     const FileReport = this.MyAccount.getTypePerson() === "Admin" ||
-      this.MyAccount.ID === Group_Item.ID || this.MyAccount.ID === File_Item.FileInfo.Owner.ID ;
+      this.MyAccount.ID === File_Item.FileInfo.Owner.ID ;
     const FileEdit = File_Item.IsBooking() &&
       File_Item.FileInfo.User_Booking?.UserID === this.MyAccount.ID
     File_Item.SetPermission({

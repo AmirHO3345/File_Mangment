@@ -15,6 +15,12 @@
             [Require]="true"
             (Change)="this.ChangeObject($event)"
           ></Selector-Form>
+          <p class="Form__Error"
+             *ngIf="this.Error_Handle.ErrorOccur.Error_Render &&
+             this.Error_Handle.ErrorOccur.Error_Position == this.Error_Handle.ErrorType().CreateObject"
+          >
+            {{this.Error_Handle.ErrorOccur.Error_Message}}
+          </p>
         </div>
         <!-- New File -->
         <div *ngIf="NewObject.form.get(this.GetSingleton().FormName.NewObject) &&
@@ -32,12 +38,24 @@
                             {{this.FileUploadInfo.FilePath}}
                         </span>
             </label>
+            <p class="Form__Error"
+               *ngIf="this.Error_Handle.ErrorOccur.Error_Render &&
+             this.Error_Handle.ErrorOccur.Error_Position == this.Error_Handle.ErrorType().UploadFile"
+            >
+              {{this.Error_Handle.ErrorOccur.Error_Message}}
+            </p>
           </div>
           <div class="Form__Group">
             <input id="FileName" type="text" class="Form__Input"
                    ngModel [name]="this.GetSingleton().FormName.FileName"
                    placeholder="FileName" required>
             <label for="FileName" class="Form__Label">File Name</label>
+            <p class="Form__Error"
+               *ngIf="this.Error_Handle.ErrorOccur.Error_Render &&
+             this.Error_Handle.ErrorOccur.Error_Position == this.Error_Handle.ErrorType().FileName"
+            >
+              {{this.Error_Handle.ErrorOccur.Error_Message}}
+            </p>
           </div>
           <div class="Form__Group">
             <Selector-Form
@@ -46,6 +64,12 @@
               [Values]="this.GetGroupsName()"
               [Require]="true"
             ></Selector-Form>
+            <p class="Form__Error"
+               *ngIf="this.Error_Handle.ErrorOccur.Error_Render &&
+             this.Error_Handle.ErrorOccur.Error_Position == this.Error_Handle.ErrorType().IncludeGroup"
+            >
+              {{this.Error_Handle.ErrorOccur.Error_Message}}
+            </p>
           </div>
         </div>
         <!-- New Group -->
@@ -56,6 +80,12 @@
                    ngModel [name]="this.GetSingleton().FormName.GroupNameInput"
                    placeholder="GroupName" required>
             <label for="GroupName" class="Form__Label">Group Name</label>
+            <p class="Form__Error"
+               *ngIf="this.Error_Handle.ErrorOccur.Error_Render &&
+             this.Error_Handle.ErrorOccur.Error_Position == this.Error_Handle.ErrorType().GroupName"
+            >
+              {{this.Error_Handle.ErrorOccur.Error_Message}}
+            </p>
           </div>
         </div>
         <!-- Join User -->
@@ -66,6 +96,12 @@
                    ngModel [name]="this.GetSingleton().FormName.UserNameInput"
                    placeholder="UserName" required>
             <label for="UserName" class="Form__Label">User Name</label>
+            <p class="Form__Error"
+               *ngIf="this.Error_Handle.ErrorOccur.Error_Render &&
+             this.Error_Handle.ErrorOccur.Error_Position == this.Error_Handle.ErrorType().UserName"
+            >
+              {{this.Error_Handle.ErrorOccur.Error_Message}}
+            </p>
           </div>
           <div class="Form__Group">
             <Selector-Form
@@ -74,6 +110,12 @@
               [Values]="this.GetGroupsName()"
               [Require]="true"
             ></Selector-Form>
+            <p class="Form__Error"
+               *ngIf="this.Error_Handle.ErrorOccur.Error_Render &&
+             this.Error_Handle.ErrorOccur.Error_Position == this.Error_Handle.ErrorType().IncludeGroup"
+            >
+              {{this.Error_Handle.ErrorOccur.Error_Message}}
+            </p>
           </div>
         </div>
       </div>

@@ -105,7 +105,8 @@ export class GroupsService {
   public GetAllGroups() {
     return this.Request.get<GroupsResponse>(`${Singleton.API}api/filemanagement/group/access` , {
       headers : new HttpHeaders({'Authorization' : this.AccountUser.getToken()})
-    }).pipe(map(Response => {
+    })
+      .pipe(map(Response => {
         const GroupArray : Group[] = [] ;
         if(Response.data.groups)
           Response.data.groups.forEach(Value => {
@@ -142,6 +143,8 @@ export class GroupsService {
         GroupObject : MainGroup.Group ,
         GroupUsers : MainGroup.User
       } ;
+    }) , catchError((ErrorValue : HttpErrorResponse) => {
+      throw ErrorValue.error ;
     }));
   }
 

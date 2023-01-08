@@ -67,6 +67,8 @@ export class UsersService {
         GroupObject : ServiceValue.GroupObject ,
         GroupUsers : UsersArray
       } ;
+    }) , catchError(ErrorValue => {
+      throw ErrorValue ;
     }));
   }
 

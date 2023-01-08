@@ -7,11 +7,13 @@ interface ErrorAPI {
       password ?: string[] ,
       email ?: string[] ,
       name ?: string[] ,
-      id_file ?: string[]
+      id_file ?: string[] ,
+      id_group ?: string[]
     } ,
     Access ?: string ,
     group ?: string ,
-    file ?: string
+    file ?: string ,
+    user ?: string
   } ;
 }
 
@@ -135,7 +137,46 @@ export class AuthenticationError extends ErrorHandlerManual {
 
 export class NewCreateError extends ErrorHandlerManual {
 
+  override Error_Front(InformationError: {}) {
+    const InformationForm = InformationError as FormGroup ;
+    if(!InformationForm.get(Singleton.FormName.NewObject)) {
+      this.ConfigureErrorHandle(ErrorsType.CreateObject
+        , 'You Don\'t Specify Any Type '  , true) ;
+    } else if(InformationForm.get(Singleton.FormName.FileName) &&
+      InformationForm.get(Singleton.FormName.FileName)?.invalid) {
+      this.ConfigureErrorHandle(ErrorsType.FileName
+        , 'The File Name Is Empty'  , true) ;
+    } else if(InformationForm.get(Singleton.FormName.FileUpload) &&
+      InformationForm.get(Singleton.FormName.FileUpload)?.invalid) {
+      this.ConfigureErrorHandle(ErrorsType.UploadFile
+        , 'You Don\'t Specify Any File '  , true) ;
+    } else if(!InformationForm.get(Singleton.FormName.GroupInclude)) {
+      this.ConfigureErrorHandle(ErrorsType.IncludeGroup
+        , 'You Don\'t Specify Any Group To Included '  , true) ;
+    } else if(InformationForm.get(Singleton.FormName.GroupNameInput) &&
+      InformationForm.get(Singleton.FormName.GroupNameInput)?.invalid) {
+      this.ConfigureErrorHandle(ErrorsType.GroupName
+        , 'The Group Name Is Empty' , true) ;
+    } else if(InformationForm.get(Singleton.FormName.UserNameInput) &&
+      InformationForm.get(Singleton.FormName.UserNameInput)?.invalid) {
+      this.ConfigureErrorHandle(ErrorsType.UserName
+        , 'The User Name Is Empty'  , true) ;
+    } else
+      super.Error_Front(InformationError) ;
+  }
+
   override Error_Server(ErrorMessage: {}): void {
+    const ActuallyMessage = ErrorMessage as ErrorAPI ;
+    if(ActuallyMessage.errors.Validation) {
+      if(ActuallyMessage.errors.Validation.name)
+        this.ConfigureErrorHandle(ErrorsType.FullName
+          ,  ActuallyMessage.errors.Validation.name[0] , true) ;
+      else {
+        super.Error_Server(ErrorMessage) ;
+      }
+    } else {
+      super.Error_Server(ErrorMessage) ;
+    }
   }
 
 }
@@ -162,7 +203,16 @@ export class FilesError extends ErrorHandlerManual {
 
   override Error_Server(ErrorMessage: {}): void {
     const ActuallyMessage = ErrorMessage as ErrorAPI ;
-    if(ActuallyMessage.errors.Access) {
+    if(ActuallyMessage.errors.Validation) {
+      if(ActuallyMessage.errors.Validation.id_group) {
+        this.ConfigureErrorHandle(ErrorsType.Group
+          , ActuallyMessage.errors.Validation.id_group[0] , true) ;
+      } else {
+        this.ConfigureErrorHandle(ErrorsType.UnKnown
+          , 'This Error Is Undefined' , true) ;
+      }
+    } else if(ActuallyMessage.errors.Access) {
+
       this.ConfigureErrorHandle(ErrorsType.Permission
         , ActuallyMessage.errors.Access , true) ;
     } else if(ActuallyMessage.errors.file) {
@@ -178,6 +228,26 @@ export class FilesError extends ErrorHandlerManual {
 
 export class UsersError extends ErrorHandlerManual {
 
+  override Error_Server(ErrorMessage: {}) : void {
+    const ActuallyMessage = ErrorMessage as ErrorAPI ;
+    if(ActuallyMessage.errors.Validation) {
+      if(ActuallyMessage.errors.Validation.id_group) {
+        this.ConfigureErrorHandle(ErrorsType.Group
+          , ActuallyMessage.errors.Validation.id_group[0] , true) ;
+      } else {
+        this.ConfigureErrorHandle(ErrorsType.UnKnown
+          , 'This Error Is Undefined' , true) ;
+      }
+    }
+    else if(ActuallyMessage.errors.user) {
+      this.ConfigureErrorHandle(ErrorsType.Permission
+        , ActuallyMessage.errors.user , true) ;
+    } else {
+      this.ConfigureErrorHandle(ErrorsType.UnKnown
+        , 'This Error Is Undefined' , true) ;
+    }
+  }
+
 }
 
 export class ReportError extends ErrorHandlerManual {
@@ -192,6 +262,9 @@ export class ReportError extends ErrorHandlerManual {
         this.ConfigureErrorHandle(ErrorsType.UnKnown
           , 'This Error Is Undefined' , true) ;
       }
+    } else if(ActuallyMessage.errors.Access) {
+      this.ConfigureErrorHandle(ErrorsType.Permission
+        , ActuallyMessage.errors.Access , true) ;
     } else {
       this.ConfigureErrorHandle(ErrorsType.UnKnown
         , 'This Error Is Undefined' , true) ;
@@ -219,5 +292,11 @@ enum ErrorsType {
   Group ,
   File ,
   ReportRoute ,
+  CreateObject ,
+  UploadFile ,
+  IncludeGroup ,
+  FileName ,
+  GroupName ,
+  UserName ,
   UnKnown
 }

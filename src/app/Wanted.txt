@@ -1,4 +1,4 @@
 
-1) bulk-check in Files
+3) ErrorHandle New Object
 
-2) Download File
+4) Permissions Owner Group (Backend)

@@ -5,6 +5,7 @@ import {UsersService} from "./Users.service";
 import {Group} from "../../Models/GroupsHandle";
 import {LoaderService} from "../../Component/Loader/Loader.service";
 import {RoutingProcessService} from "../../Routing/RoutingProcess.service";
+import {ProcessPopupService} from "../../Component/ProcessPopup/ProcessPopup.service";
 
 export abstract class UsersComponent {
 
@@ -34,14 +35,16 @@ export abstract class UsersComponent {
 @Component({
   templateUrl : './Users.component.html' ,
   styleUrls : ['./Users.component.css']
-}) export class UsersPrivateComponent extends UsersComponent
+})
+export class UsersPrivateComponent extends UsersComponent
   implements OnInit {
 
   MainGroup !: Group ;
 
   constructor(protected override UserProcess : UsersService ,
               protected override LoadingProcess : LoaderService ,
-              protected override RoutingProcess : RoutingProcessService ) {
+              protected override RoutingProcess : RoutingProcessService ,
+              private PopupProcess : ProcessPopupService) {
     super(UserProcess , LoadingProcess , RoutingProcess) ;
   }
 
@@ -69,6 +72,10 @@ export abstract class UsersComponent {
         this.User_Items = Value.GroupUsers ;
         this.LoadingProcess.DoneTask() ;
       } , ErrorValue => {
+        this.Error_Handle.Error_Server(ErrorValue) ;
+        if(this.Error_Handle.ErrorOccur.Error_Position
+          === this.Error_Handle.ErrorType().Group)
+          this.RoutingProcess.Route2Error404() ;
         this.LoadingProcess.DoneTask() ;
       });
   }
@@ -82,16 +89,20 @@ export abstract class UsersComponent {
     this.UserProcess.OutUser(this.MainGroup.ID , [UserID]).subscribe(() => {
       this.UpdateData() ;
     } , ErrorValue => {
+      this.Error_Handle.Error_Server(ErrorValue) ;
+      this.PopupProcess.ViewPopup("Error", this.Error_Handle.ErrorOccur.Error_Message) ;
       this.LoadingProcess.DoneTask() ;
     });
   }
+
 }
 
 
 @Component({
   templateUrl : './Users.component.html' ,
   styleUrls : ['./Users.component.css']
-}) export class UsersGlobalComponent extends UsersComponent
+})
+export class UsersGlobalComponent extends UsersComponent
   implements OnInit {
 
   constructor(protected override UserProcess : UsersService ,

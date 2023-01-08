@@ -28,8 +28,8 @@ export class ReportService {
         File : ValueResponse.File ,
         Report : this.ConfigureData(ValueResponse.Report)
       } ;
-    }) , catchError((ErrorValue : HttpErrorResponse) => {
-      throw ErrorValue.error ;
+    }) , catchError(ErrorValue => {
+      throw ErrorValue ;
     }));
   }
 

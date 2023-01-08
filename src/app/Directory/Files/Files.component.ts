@@ -6,6 +6,7 @@ import {RoutingProcessService} from "../../Routing/RoutingProcess.service";
 import {LoaderService} from "../../Component/Loader/Loader.service";
 import {ProcessPopupService} from "../../Component/ProcessPopup/ProcessPopup.service";
 import {ErrorHandlerManual, FactoryErrors} from "../../Models/ErrorHandler";
+import {Singleton} from "../../Models/Singleton";
 
 
 export abstract class FileComponent {
@@ -65,8 +66,10 @@ export abstract class FileComponent {
 
   protected abstract UpdateFileData() : void ;
 
-  protected DeleteFile(FileID : number) {
-    this.LoadingProcess.ActiveTask() ;
+  protected abstract DeleteFile(FileID : number) : void ;
+
+  /*
+  this.LoadingProcess.ActiveTask() ;
     this.FileProcess.DeleteFile(FileID).subscribe(Value => {
       this.UpdateFileData();
     } , ErrorValue => {
@@ -74,7 +77,7 @@ export abstract class FileComponent {
       this.PopupProcess.ViewPopup("Error", this.Error_Handler.ErrorOccur.Error_Message) ;
       this.LoadingProcess.DoneTask() ;
     });
-  }
+   */
 
   public BookingFile() {
     if(this.SelectFile.length < 1)
@@ -128,7 +131,7 @@ export abstract class FileComponent {
   }
 
   protected GetDownloadFile(FileItem : Files) {
-    this.FileProcess.DownloadFile(FileItem).subscribe();
+    this.FileProcess.DownloadFile(FileItem).subscribe() ;
   }
 
   public RefreshItems() {
@@ -176,6 +179,17 @@ export class GlobalFilesComponent extends FileComponent implements OnInit {
     this.InitialData() ;
   }
 
+  protected DeleteFile(FileID: number): void {
+    this.LoadingProcess.ActiveTask() ;
+    this.FileProcess.DeleteFile(FileID , Singleton.GlobalGroupID ).subscribe(Value => {
+      this.UpdateFileData();
+    } , ErrorValue => {
+      this.Error_Handler.Error_Server(ErrorValue) ;
+      this.PopupProcess.ViewPopup("Error", this.Error_Handler.ErrorOccur.Error_Message) ;
+      this.LoadingProcess.DoneTask() ;
+    });
+  }
+
 }
 
 @Component({
@@ -210,13 +224,29 @@ export class PrivateFilesComponent extends FileComponent implements OnInit {
         this.LoadingProcess.DoneTask() ;
       } , ErrorValue => {
         this.Error_Handler.Error_Server(ErrorValue) ;
-        this.PopupProcess.ViewPopup("Error", this.Error_Handler.ErrorOccur.Error_Message ) ;
+        switch (this.Error_Handler.ErrorOccur.Error_Position) {
+          case this.Error_Handler.ErrorType().Group :
+          case this.Error_Handler.ErrorType().Permission :
+            this.RoutingProcess.Route2Error404() ;
+            break ;
+        }
         this.LoadingProcess.DoneTask() ;
       });
   }
 
   protected UpdateFileData() {
     this.InitialData();
+  }
+
+  protected DeleteFile(FileID: number): void {
+    this.LoadingProcess.ActiveTask() ;
+    this.FileProcess.DeleteFile(FileID , this.MainGroup.ID).subscribe(Value => {
+      this.UpdateFileData();
+    } , ErrorValue => {
+      this.Error_Handler.Error_Server(ErrorValue) ;
+      this.PopupProcess.ViewPopup("Error", this.Error_Handler.ErrorOccur.Error_Message) ;
+      this.LoadingProcess.DoneTask() ;
+    });
   }
 
 }
@@ -253,6 +283,10 @@ export class MyFilesComponent extends FileComponent implements OnInit {
     this.InitialData();
   }
 
+  protected DeleteFile(FileID: number): void {
+
+  }
+
 }
 
 @Component({
@@ -285,6 +319,9 @@ export class AllWebSiteFiles extends FileComponent implements OnInit {
 
   protected UpdateFileData() {
     this.InitialData();
+  }
+
+  protected DeleteFile(FileID: number): void {
   }
 
 }

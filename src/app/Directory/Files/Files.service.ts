@@ -70,14 +70,15 @@ export class FilesService {
     })) ;
   }
 
-  public DeleteFile(FileID : number) {
-    return this.Request.delete(`${Singleton.API}api/filemanagement/file/delete`
+  public DeleteFile(FileID : number , GroupID : number) {
+    return this.Request.delete(`${Singleton.API}api/filemanagement/group/file/delete`
       ,{
         headers : new HttpHeaders({'Authorization' : this.AccountUser.getToken()}) ,
         body : {
+          id_group : GroupID ,
           id_file : FileID
         }
-      }).pipe(catchError((ErrorResponse : HttpErrorResponse) => {
+      }).pipe(map(Value => {console.log(Value)}) , catchError((ErrorResponse : HttpErrorResponse) => {
       throw ErrorResponse.error ;
     })) ;
   }
@@ -95,13 +96,14 @@ export class FilesService {
           GroupObject : ServiceValue.GroupObject ,
           GroupFiles : FilesArray
         } ;
-    }) , catchError((ErrorValue : HttpErrorResponse) => {
-      throw ErrorValue.error
+    }) , catchError((ErrorValue) => {
+      throw ErrorValue ;
     })) ;
   }
 
   public GetGlobalGroupFile() {
     return this.GetPrivateGroupFile(Singleton.GlobalGroupID).pipe(map(ValeResponse => {
+      console.log(ValeResponse) ;
       return ValeResponse.GroupFiles ;
     }) , catchError(ErrorValue => {
       throw ErrorValue ;
@@ -188,13 +190,21 @@ export class FilesService {
   }
 
   public DownloadFile(FileItem : Files) {
-    return this.Request.get<ArrayBuffer>(`${Singleton.API}${FileItem.FileInfo.Path}` , {
-      headers : new HttpHeaders({'Authorization' : this.AccountUser.getToken()})
+    return this.Request.get(`${Singleton.API}api/filemanagement/file/read` ,{
+      responseType : "blob" ,
+      headers : new HttpHeaders({ 'Authorization' : this.AccountUser.getToken() }) ,
+      params : new HttpParams().set('id_file' , FileItem.FileInfo.ID)
     }).pipe(take(1) , map(Response => {
-        const BlobFile = new Blob([Response]) ;
-        const URLFile = URL.createObjectURL(BlobFile) ;
-        const OpenURL = open(URLFile) ;
-      }))
+      let BinaryData = [] ;
+      BinaryData.push(Response);
+      let DownloadLink = document.createElement('a');
+      DownloadLink.href = window.URL.createObjectURL(new Blob(BinaryData, { type: Response.type }));
+      DownloadLink.setAttribute('download', FileItem.FileInfo.FileName);
+      document.body.appendChild(DownloadLink) ;
+      DownloadLink.click();
+    }) , catchError((ErrorValue : HttpErrorResponse) => {
+      throw ErrorValue.error ;
+    }));
   }
 
   private ConfigureData(TypeFile : {
